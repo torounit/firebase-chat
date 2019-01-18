@@ -1,10 +1,5 @@
 import React from "react"
-import {
-  MuiThemeProvider,
-  createMuiTheme,
-  CssBaseline,
-  colors,
-} from "@material-ui/core"
+import { colors, createMuiTheme, CssBaseline, MuiThemeProvider } from "@material-ui/core"
 
 const { purple, green } = colors
 const theme = createMuiTheme({
