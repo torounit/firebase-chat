@@ -15,8 +15,7 @@ interface withStylesProps {
   classes: any
 }
 
-interface WithStateProps {
-}
+interface WithStateProps {}
 
 interface WithHandlerProps {
   reply: (id: string) => void
@@ -31,13 +30,13 @@ const Messages: React.FC<FCProps> = ({ classes, messages, remove }) => (
     {messages.map(({ authorUid, content, id }, index) => (
       <Fragment key={index}>
         <ListItem button>
-          <ListItemText primary={content} secondary=""/>
+          <ListItemText primary={content} secondary="" />
           <ListItemIcon
             onClick={() => {
               remove(id)
             }}
           >
-            <Delete/>
+            <Delete />
           </ListItemIcon>
         </ListItem>
       </Fragment>
@@ -52,7 +51,6 @@ export default compose<FCProps, Props>(
         onRemove(id)
       }
     },
-    reply: ({ onReply }) => id => {
-    },
-  }),
+    reply: ({ onReply }) => id => {},
+  })
 )(Messages)

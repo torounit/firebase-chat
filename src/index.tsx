@@ -9,16 +9,16 @@ import "./firebase"
 const render = () => {
   ReactDOM.render(
     <Provider store={store}>
-      <App/>
+      <App />
     </Provider>,
-    document.getElementById("root"),
+    document.getElementById("root")
   )
 }
-render();
+render()
 
 /// <reference types="webpack-env" />
 if (module.hot) {
-  module.hot.accept("./containers/App", render);
+  module.hot.accept("./containers/App", render)
 }
 
 // If you want your app to work offline and load faster, you can change

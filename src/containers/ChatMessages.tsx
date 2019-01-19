@@ -20,7 +20,7 @@ const ChatMessages = connect<StateProps, DispatchProps, {}, AppState>(
     messages: state.messages,
   }),
   (dispatch: Dispatch): DispatchProps => ({
-    onRemove: (id) => {
+    onRemove: id => {
       dispatch(remove(id))
     },
   })

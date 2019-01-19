@@ -3,15 +3,12 @@ import { colors, createMuiTheme, CssBaseline, MuiThemeProvider } from "@material
 
 const { purple, green } = colors
 const theme = createMuiTheme({
-  palette: {
-  },
+  palette: {},
   typography: {
     useNextVariants: true,
   },
 })
-const withRoot = (Component: React.ComponentClass | React.SFC) => (
-  props: any
-) => (
+const withRoot = (Component: React.ComponentClass | React.SFC) => (props: any) => (
   <MuiThemeProvider theme={theme}>
     {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
     <CssBaseline />

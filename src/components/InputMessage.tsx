@@ -14,7 +14,7 @@ interface withStylesProps {
 
 interface WithStateProps {
   message: Message
-  updateMessage: (f: (message:Message) => Message) => void
+  updateMessage: (f: (message: Message) => Message) => void
 }
 
 interface WithHandlerProps {
@@ -68,7 +68,7 @@ export default compose<FCProps, Props>(
         // @ts-ignore
         if (!event.isComposing) {
           let value = event.target.value
-          updateMessage((message) => ({ ...message, content: value }))
+          updateMessage(message => ({ ...message, content: value }))
         }
       }
     },

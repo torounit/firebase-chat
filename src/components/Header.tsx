@@ -17,9 +17,7 @@ const Header: React.FC<Props> = ({ user, classes, onLogin, onLogout }) => (
       <Typography color="inherit" className={classes.grow}>
         App
       </Typography>
-      <IconButton color="inherit">
-        {user.photoURL ? <Avatar src={user.photoURL} /> : <AccountCircle />}
-      </IconButton>
+      <IconButton color="inherit">{user.photoURL ? <Avatar src={user.photoURL} /> : <AccountCircle />}</IconButton>
       {!user.displayName && (
         <Button color="inherit" onClick={() => onLogin()}>
           Login

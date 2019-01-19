@@ -11,7 +11,7 @@ export const initialState: UserInfo = {
   uid: "",
 }
 
-export const reducer =  reducerWithInitialState(initialState)
+export const reducer = reducerWithInitialState(initialState)
   .case(login, (state: any, user) => {
     return {
       ...state,

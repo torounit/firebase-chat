@@ -20,11 +20,10 @@ export default connect<StateProps, any, {}, StateProps & DispatchProps, AppState
   (state: StateProps, { dispatch }: { dispatch: Dispatch }, ownProps: Object) => ({
     ...state,
     ...ownProps,
-    onSend: (message: { content: string }) => {
+    onSend: message => {
       dispatch(
         add({
           ...message,
-          id: "hoge",
           createdAt: Date.now(),
           authorUid: state.uid,
         })
