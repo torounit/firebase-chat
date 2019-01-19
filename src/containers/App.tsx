@@ -5,7 +5,6 @@ import "firebase/auth"
 import { compose, lifecycle } from "recompose"
 import { Dispatch } from "redux"
 import { connect } from "react-redux"
-import { Paper } from "@material-ui/core"
 
 import withTheme from "../utils/hoc/withTheme"
 
@@ -18,49 +17,39 @@ import AppHeader from "./AppHeader"
 import ChatMessages from "./ChatMessages"
 import ChatInputter from "./ChatInputter"
 
-interface DispatchProps {
-  init: () => void
-}
-
 interface StateProps {
   auth?: UserInfo
-  messages?: Message[]
 }
 
-type Props = StateProps & DispatchProps
+type Props = StateProps
 
 const App: React.FC<StateProps> = ({ auth }) => (
   <div className="App">
-    <AppHeader />
-    <ChatMessages />
-    <ChatInputter />
+    <AppHeader/>
+    <ChatMessages/>
+    <ChatInputter/>
   </div>
 )
 
 export default compose(
   withTheme,
-  connect(
+  connect<StateProps, {}, {}, AppState>(
     (state: AppState): StateProps => ({
       auth: state.auth,
-      messages: [],
     }),
-    (dispatch: Dispatch) => ({
-      init: () => {
-        //login
-        firebase.auth().onAuthStateChanged(user => {
-          if (user) {
-            dispatch(auth.login(user))
-          }
-        })
-        //fetch
-        dispatch(messages.fetch())
-      },
-    })
   ),
   lifecycle<Props, {}>({
     componentDidMount() {
-      const { init } = this.props
-      init()
+      // @ts-ignore
+      const { dispatch } = this.props
+      //login
+      firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          dispatch(auth.login(user))
+        }
+      })
+      //fetch
+      dispatch(messages.fetch())
     },
-  })
+  }),
 )(App)
