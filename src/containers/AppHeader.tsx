@@ -2,7 +2,7 @@ import React from "react"
 import * as firebase from "firebase/app"
 import "firebase/auth"
 import { connect } from "react-redux"
-import Header, { StateProps, DispatchProps } from "../components/Header"
+import Header, { DispatchProps, StateProps } from "../components/Header"
 import { AppState } from "../store"
 
 const AppHeader = connect(

@@ -24,7 +24,7 @@ type ComposedProps = WithStateProps & WithHandlerProps
 type FCProps = ComposedProps & Props & StyledComponentProps
 
 const InputMessage: React.FC<FCProps> = ({ classes = {}, onChange, send, message }) => (
-  <AppBar position={"fixed"} className={classes.appBar} component="div" color="default">
+  <AppBar position={"static"} className={classes.appBar} component="div" color="default">
     <Toolbar>
       <TextField
         multiline
@@ -70,7 +70,10 @@ export default compose<FCProps, Props>(
       },
     send: ({ message, onSend, updateMessage }) => () => {
       if (message) {
-        onSend(message)
+        onSend({
+          ...message,
+          content: message.content.trim()
+        })
         updateMessage(() => initialMessage)
       }
     },

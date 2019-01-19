@@ -11,7 +11,6 @@ const ref = database.ref("messages")
 
 const fetch = () => {
   return new Promise((resolve, reject) => {
-    console.log(ref)
     ref.off()
     ref.on(
       "value",
@@ -43,7 +42,9 @@ const addMessage = function*(action: Action<Message>) {
 
 const removeMessage = function*(action: Action<string>) {
   const id = action.payload
-  yield call(id => database.ref(`messages/${id}`).remove(), id)
+  if (id) {
+    yield call(id => database.ref(`messages/${id}`).remove(), id)
+  }
 }
 
 const saga = [

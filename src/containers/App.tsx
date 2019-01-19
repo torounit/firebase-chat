@@ -14,26 +14,50 @@ import { UserInfo } from "firebase"
 import AppHeader from "./AppHeader"
 import ChatMessages from "./ChatMessages"
 import ChatInputter from "./ChatInputter"
+import { Grid, StyledComponentProps, withStyles } from "@material-ui/core"
+import { Message } from "../store/messages/state"
 
 interface StateProps {
   auth: UserInfo
+  messages: Message[]
 }
 
-type Props = StateProps & DispatchProp
+type Props = StateProps & DispatchProp & StyledComponentProps
 
-const App: React.FC<Props> = ({ auth }) => (
+
+const App: React.FC<Props> = ({ auth, classes = {} }) => (
   <div className="App">
-    <AppHeader />
-    {auth.uid && <ChatMessages />}
-    <ChatInputter />
+    <Grid className={classes.container} container wrap="nowrap" direction="column" justify="center">
+      <Grid item>
+        <AppHeader />
+      </Grid>
+      <Grid item className={classes.main}>
+        {auth.uid && <ChatMessages />}
+      </Grid>
+      <Grid item>
+        <ChatInputter />
+      </Grid>
+    </Grid>
   </div>
 )
 
 export default compose<Props, {}>(
   withTheme,
+  withStyles({
+    container: {
+      height: "100vh",
+    },
+    main: {
+      //flexGrow: 1,
+      flexShrink: 1,
+      overflow: "hidden",
+      height: "100vh",
+    },
+  }),
   connect<StateProps, DispatchProp, {}, AppState>(
     (state: AppState): StateProps => ({
       auth: state.auth,
+      messages: state.messages,
     })
   ),
   lifecycle<Props, {}>({
@@ -43,17 +67,15 @@ export default compose<Props, {}>(
       firebase.auth().onAuthStateChanged(user => {
         if (user) {
           dispatch(authActions.login(user))
-        }
-        else {
+          dispatch(messagesActions.fetch())
+        } else {
           dispatch(authActions.logout())
         }
       })
     },
-    componentDidUpdate() {
-      const { auth, dispatch } = this.props
-      console.log(auth)
+    componentDidUpdate(prevProps) {
+      const { auth, dispatch, messages } = this.props
       if (auth.uid) {
-        dispatch(messagesActions.fetch())
       }
     },
   })

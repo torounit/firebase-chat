@@ -37,6 +37,25 @@ interface WithHandlerProps {
 
 export type Props = StateProps & DispatchProps & StyledComponentProps
 type FCProps = Props & WithStateProps & WithHandlerProps
+
+const enhancer = compose<FCProps, Props>(
+  withStyles({
+    grow: {
+      flexGrow: 1,
+    },
+  }),
+  withState<WithStateProps, HTMLElement | null, string, string>("anchorEl", "setAnchorEl", null),
+  withHandlers<FCProps, WithHandlerProps>({
+    handleMenuOpen: ({ setAnchorEl }) => event => {
+      event.persist()
+      setAnchorEl(() => event.target as HTMLElement)
+    },
+    handleMenuClose: ({ setAnchorEl }) => () => {
+      setAnchorEl(() => null)
+    },
+  })
+)
+
 const Header: React.FC<FCProps> = ({
   user,
   classes = {},
@@ -47,7 +66,7 @@ const Header: React.FC<FCProps> = ({
   anchorEl,
 }) => (
   <div>
-    <AppBar position={"sticky"}>
+    <AppBar position={"static"}>
       <Toolbar>
         <Typography color="inherit" className={classes.grow}>
           Chat App
@@ -82,20 +101,5 @@ const Header: React.FC<FCProps> = ({
     </Menu>
   </div>
 )
-export default compose<FCProps, Props>(
-  withStyles({
-    grow: {
-      flexGrow: 1,
-    },
-  }),
-  withState<WithStateProps, HTMLElement | null, string, string>("anchorEl", "setAnchorEl", null),
-  withHandlers<FCProps, WithHandlerProps>({
-    handleMenuOpen: ({ setAnchorEl }) => event => {
-      event.persist()
-      setAnchorEl(() => event.target as HTMLElement)
-    },
-    handleMenuClose: ({ setAnchorEl }) => () => {
-      setAnchorEl(() => null)
-    },
-  })
-)(Header)
+
+export default enhancer(Header)
