@@ -16,10 +16,9 @@ const fetch = () => {
       "value",
       (snapshot: DataSnapshot) => {
         if (snapshot) {
-          const messages = snapshot.val()
+          const messages = snapshot.val() || []
           resolve({
             messages: Object.entries(messages).map(([id, value]) => ({ ...value, id })),
-            //messages: Object.values(messages)
           })
           reject([])
         }

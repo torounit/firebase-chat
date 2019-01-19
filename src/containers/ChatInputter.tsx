@@ -1,7 +1,7 @@
 import React from "react"
 import { connect } from "react-redux"
 
-import InputMessage, { Props } from "../components/InputMessage"
+import InputMessage, { DispatchProps } from "../components/InputMessage"
 import { AppState } from "../store"
 import { Dispatch } from "redux"
 import { add } from "../store/messages/actions"
@@ -9,8 +9,6 @@ import { add } from "../store/messages/actions"
 interface StateProps {
   uid: string
 }
-
-type DispatchProps = Props
 
 export default connect<StateProps, any, {}, StateProps & DispatchProps, AppState>(
   (state: AppState): StateProps => ({

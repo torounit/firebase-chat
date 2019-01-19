@@ -32,9 +32,7 @@ type Props = StateProps & DispatchProps
 const App: React.FC<StateProps> = ({ auth }) => (
   <div className="App">
     <AppHeader />
-    <Paper>
-      <ChatMessages />
-    </Paper>
+    <ChatMessages />
     <ChatInputter />
   </div>
 )

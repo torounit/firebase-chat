@@ -1,17 +1,29 @@
 import React from "react"
-import { AppBar, Avatar, Button, IconButton, Toolbar, Typography } from "@material-ui/core"
+import {
+  AppBar,
+  Avatar,
+  Button,
+  IconButton,
+  StyledComponentProps,
+  Toolbar,
+  Typography,
+} from "@material-ui/core"
 import { withStyles } from "@material-ui/core/styles"
 import { AccountCircle } from "@material-ui/icons"
 import { UserInfo } from "firebase"
 
-interface Props {
-  classes?: any
+export interface StateProps {
   user: UserInfo
+}
+
+export interface DispatchProps {
   onLogin: () => void
   onLogout?: () => void
 }
 
-const Header: React.FC<Props> = ({ user, classes, onLogin, onLogout }) => (
+export type Props = StateProps & DispatchProps & StyledComponentProps
+
+const Header: React.FC<Props> = ({ user, classes = {}, onLogin, onLogout }) => (
   <AppBar position={"sticky"}>
     <Toolbar>
       <Typography color="inherit" className={classes.grow}>

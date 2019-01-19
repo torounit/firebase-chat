@@ -1,16 +1,14 @@
 import React from "react"
-import { AppBar, Button, TextField, Toolbar } from "@material-ui/core"
+import { AppBar, Button, StyledComponentProps, TextField, Toolbar } from "@material-ui/core"
 import { withStyles } from "@material-ui/core/styles"
 import { compose, withHandlers, withState } from "recompose"
 import { Message } from "../store/messages/state"
 
-export interface Props {
+export interface DispatchProps {
   onSend: (message: Message) => void
 }
 
-interface withStylesProps {
-  classes: any
-}
+export type Props = DispatchProps
 
 interface WithStateProps {
   message: Message
@@ -23,9 +21,9 @@ interface WithHandlerProps {
 }
 
 type ComposedProps = WithStateProps & WithHandlerProps
-type FCProps = ComposedProps & Props & withStylesProps
+type FCProps = ComposedProps & Props & StyledComponentProps
 
-const InputMessage: React.FC<FCProps> = ({ classes, onChange, send, message }) => (
+const InputMessage: React.FC<FCProps> = ({ classes = {}, onChange, send, message }) => (
   <AppBar position={"fixed"} className={classes.appBar} component="div" color="default">
     <Toolbar>
       <TextField

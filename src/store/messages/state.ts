@@ -17,7 +17,6 @@ export const reducer = reducerWithInitialState(initialState)
   .case(
     receive,
     (state: Message[], payload: Message[]): Message[] => {
-      console.log(payload)
       return payload
     }
   )
