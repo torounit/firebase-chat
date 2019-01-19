@@ -4,4 +4,4 @@ import actionCreatorFactory from "typescript-fsa"
 const actionCreator = actionCreatorFactory()
 
 export const login = actionCreator<UserInfo>("LOGIN")
-export const logout = actionCreator<{}>("LOGOUT")
+export const logout = actionCreator<void>("LOGOUT")

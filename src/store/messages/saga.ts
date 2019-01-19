@@ -11,6 +11,7 @@ const ref = database.ref("messages")
 
 const fetch = () => {
   return new Promise((resolve, reject) => {
+    console.log(ref)
     ref.off()
     ref.on(
       "value",

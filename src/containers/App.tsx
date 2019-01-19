@@ -3,53 +3,58 @@ import * as firebase from "firebase/app"
 import "firebase/auth"
 
 import { compose, lifecycle } from "recompose"
-import { Dispatch } from "redux"
-import { connect } from "react-redux"
+import { connect, DispatchProp } from "react-redux"
 
 import withTheme from "../utils/hoc/withTheme"
 
-import * as auth from "../store/auth/actions"
-import * as messages from "../store/messages/actions"
+import * as authActions from "../store/auth/actions"
+import * as messagesActions from "../store/messages/actions"
 import { AppState } from "../store"
-import { Message } from "../store/messages/state"
 import { UserInfo } from "firebase"
 import AppHeader from "./AppHeader"
 import ChatMessages from "./ChatMessages"
 import ChatInputter from "./ChatInputter"
 
 interface StateProps {
-  auth?: UserInfo
+  auth: UserInfo
 }
 
-type Props = StateProps
+type Props = StateProps & DispatchProp
 
-const App: React.FC<StateProps> = ({ auth }) => (
+const App: React.FC<Props> = ({ auth }) => (
   <div className="App">
-    <AppHeader/>
-    <ChatMessages/>
-    <ChatInputter/>
+    <AppHeader />
+    {auth.uid && <ChatMessages />}
+    <ChatInputter />
   </div>
 )
 
-export default compose(
+export default compose<Props, {}>(
   withTheme,
-  connect<StateProps, {}, {}, AppState>(
+  connect<StateProps, DispatchProp, {}, AppState>(
     (state: AppState): StateProps => ({
       auth: state.auth,
-    }),
+    })
   ),
   lifecycle<Props, {}>({
     componentDidMount() {
-      // @ts-ignore
       const { dispatch } = this.props
       //login
       firebase.auth().onAuthStateChanged(user => {
         if (user) {
-          dispatch(auth.login(user))
+          dispatch(authActions.login(user))
+        }
+        else {
+          dispatch(authActions.logout())
         }
       })
-      //fetch
-      dispatch(messages.fetch())
     },
-  }),
+    componentDidUpdate() {
+      const { auth, dispatch } = this.props
+      console.log(auth)
+      if (auth.uid) {
+        dispatch(messagesActions.fetch())
+      }
+    },
+  })
 )(App)

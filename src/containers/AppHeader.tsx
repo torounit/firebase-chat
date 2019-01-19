@@ -12,7 +12,10 @@ const AppHeader = connect(
   (): DispatchProps => ({
     onLogin: () => {
       let provider = new firebase.auth.GoogleAuthProvider()
-      firebase.auth().signInWithPopup(provider)
+      firebase.auth().signInWithRedirect(provider)
+    },
+    onLogout: () => {
+      firebase.auth().signOut()
     },
   })
 )(Header)
