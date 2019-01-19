@@ -5,29 +5,31 @@ import InputMessage, { Props } from "../components/InputMessage"
 import { AppState } from "../store"
 import { Message } from "../store/messages/state"
 import { Dispatch } from "redux"
-import { add } from "../store/messages/actions"
-import uuid from "../utils/uuid"
+import { add, remove } from "../store/messages/actions"
 
 interface StateProps {
-  messages: Message[]
-  uid?: string
+  uid: string
 }
 
-const ChatMessages = connect<StateProps, Props, {}, AppState>(
+type DispatchProps = Props
+
+export default connect<StateProps, any, {}, StateProps & DispatchProps, AppState>(
   (state: AppState): StateProps => ({
-    messages: state.messages,
     uid: state.auth.uid,
   }),
-  (dispatch: Dispatch): Props => ({
-    onSend: (message: { authorUid?: string; content: string }) => {
-
-      dispatch(add({
-        ...message,
-        createdAt: Date.now(),
-        id: uuid()
-      }))
+  (dispatch: Dispatch) => ({ dispatch }),
+  (state: StateProps, { dispatch }: { dispatch: Dispatch }, ownProps: Object) => ({
+    ...state,
+    ...ownProps,
+    onSend: (message: { content: string }) => {
+      dispatch(
+        add({
+          ...message,
+          id: "hoge",
+          createdAt: Date.now(),
+          authorUid: state.uid,
+        })
+      )
     },
   })
 )(InputMessage)
-
-export default ChatMessages

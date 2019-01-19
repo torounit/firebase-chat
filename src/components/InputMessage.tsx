@@ -1,11 +1,11 @@
-import React from "react"
+import React, { ChangeEvent, SyntheticEvent } from "react"
 import { AppBar, Button, TextField, Toolbar } from "@material-ui/core"
-import { Chat } from "@material-ui/icons"
 import { withStyles } from "@material-ui/core/styles"
 import { compose, withHandlers, withState } from "recompose"
+import { Message } from "../store/messages/state"
 
 export interface Props {
-  onSend: (message: { authorUid?: string; content: string }) => void
+  onSend: (message: Message) => void
 }
 
 interface withStylesProps {
@@ -13,40 +13,46 @@ interface withStylesProps {
 }
 
 interface WithStateProps {
-  message: string
-  uid: string
-  updateMessage: (f: () => string) => void
+  message: Message
+  updateMessage: (f: (message:Message) => Message) => void
 }
 
 interface WithHandlerProps {
-  update: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
-  send: React.MouseEventHandler<HTMLElement>
+  onChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  send: () => void
 }
 
 type ComposedProps = WithStateProps & WithHandlerProps
 type FCProps = ComposedProps & Props & withStylesProps
 
-const InputMessage: React.FC<FCProps> = ({ classes, update, send }) => (
-  <AppBar
-    position={"fixed"}
-    className={classes.appBar}
-    component="div"
-    color="default"
-  >
+const InputMessage: React.FC<FCProps> = ({ classes, onChange, send, message }) => (
+  <AppBar position={"fixed"} className={classes.appBar} component="div" color="default">
     <Toolbar>
       <TextField
         multiline
         fullWidth
+        value={message.content}
         rowsMax="4"
         margin="normal"
-        onChange={update}
+        onChange={event => onChange(event)}
+        onKeyDown={event => {
+          if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+            send()
+          }
+        }}
       />
-      <Button color="inherit" onClick={send}>
-        <Chat fontSize="small" /> Send
+      <Button type="submit" color="inherit" onClick={send}>
+        Send
       </Button>
     </Toolbar>
   </AppBar>
 )
+
+const initialMessage: Message = {
+  content: "",
+  id: "",
+}
+
 //compose<InputProps, OutputProps>
 export default compose<FCProps, Props>(
   withStyles({
@@ -55,21 +61,22 @@ export default compose<FCProps, Props>(
       bottom: 0,
     },
   }),
-  withState<WithStateProps, string, "message", "updateMessage">(
-    "message",
-    "updateMessage",
-    ""
-  ),
+  withState<WithStateProps, Message, "message", "updateMessage">("message", "updateMessage", initialMessage),
   withHandlers<FCProps, WithHandlerProps>({
-    update: ({ updateMessage }) => event => {
-      let value = event.target.value
-      updateMessage(() => value)
+    onChange: ({ updateMessage }) => {
+      return event => {
+        // @ts-ignore
+        if (!event.isComposing) {
+          let value = event.target.value
+          updateMessage((message) => ({ ...message, content: value }))
+        }
+      }
     },
-    send: ({ message, onSend, uid }) => event => {
-      onSend({
-        authorUid: uid,
-        content: message,
-      })
+    send: ({ message, onSend, updateMessage }) => () => {
+      if (message) {
+        onSend(message)
+        updateMessage(() => initialMessage)
+      }
     },
   })
 )(InputMessage)

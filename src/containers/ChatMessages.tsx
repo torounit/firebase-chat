@@ -4,27 +4,26 @@ import Messages from "../components/Messages"
 import { AppState } from "../store"
 import { Message } from "../store/messages/state"
 import { Dispatch } from "redux"
+import { remove } from "../store/messages/actions"
 
 interface DispatchProps {
-  onClick: () => void
+  onRemove: (id: string) => void
+  onReply?: () => void
 }
 
 interface StateProps {
   messages: Message[]
 }
 
-const ChatMessages = connect(
-  (state: AppState): StateProps => {
-    console.log(state)
-    return ({
-      messages: state.messages,
-    })
-  },
-  (dispatch:Dispatch): DispatchProps => ({
-    onClick: () => {
-
-    },
+const ChatMessages = connect<StateProps, DispatchProps, {}, AppState>(
+  (state: AppState): StateProps => ({
+    messages: state.messages,
   }),
+  (dispatch: Dispatch): DispatchProps => ({
+    onRemove: (id) => {
+      dispatch(remove(id))
+    },
+  })
 )(Messages)
 
 export default ChatMessages

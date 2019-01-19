@@ -1,23 +1,14 @@
-import { combineReducers, compose, createStore } from "redux"
+import { applyMiddleware, combineReducers, compose, createStore } from "redux"
+import createSagaMiddleware from "redux-saga"
 import * as auth from "./auth/state"
 import * as messages from "./messages/state"
 import { Message } from "./messages/state"
-
-import * as firebase from "firebase/app"
-import "firebase/auth"
 import { UserInfo } from "firebase"
-
-firebase.initializeApp({
-  apiKey: "AIzaSyBIg1CM-15Ag74cwnB9BaJG3z_pFnr8BX0",
-  authDomain: "torounit-firebase-chat.firebaseapp.com",
-  databaseURL: "https://torounit-firebase-chat.firebaseio.com",
-  projectId: "torounit-firebase-chat",
-  storageBucket: "torounit-firebase-chat.appspot.com",
-  messagingSenderId: "646034935690",
-})
+import { all } from "redux-saga/effects"
+import messagesSaga from "./messages/saga"
 
 export type AppState = {
-  messages: Message[],
+  messages: Message[]
   auth: UserInfo
 }
 
@@ -26,6 +17,11 @@ const initialState = {
   messages: [],
 }
 
+const rootSaga = function*() {
+  yield all([...messagesSaga])
+}
+const sagaMiddleware = createSagaMiddleware()
+
 export const store = createStore(
   combineReducers<AppState>({
     auth: auth.reducer,
@@ -33,7 +29,8 @@ export const store = createStore(
   }),
   initialState,
   compose(
-    (window as any).__REDUX_DEVTOOLS_EXTENSION__ &&
-      (window as any).__REDUX_DEVTOOLS_EXTENSION__(),
+    applyMiddleware(sagaMiddleware),
+    (window as any).__REDUX_DEVTOOLS_EXTENSION__ && (window as any).__REDUX_DEVTOOLS_EXTENSION__()
   )
 )
+sagaMiddleware.run(rootSaga)

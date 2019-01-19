@@ -9,7 +9,8 @@ import { Paper } from "@material-ui/core"
 
 import withTheme from "../utils/hoc/withTheme"
 
-import { login } from "../store/auth/actions"
+import * as auth from "../store/auth/actions"
+import * as messages from "../store/messages/actions"
 import { AppState } from "../store"
 import { Message } from "../store/messages/state"
 import { UserInfo } from "firebase"
@@ -18,7 +19,7 @@ import ChatMessages from "./ChatMessages"
 import ChatInputter from "./ChatInputter"
 
 interface DispatchProps {
-  login?: () => void
+  init: () => void
 }
 
 interface StateProps {
@@ -46,21 +47,22 @@ export default compose(
       messages: [],
     }),
     (dispatch: Dispatch) => ({
-      login: () => {
+      init: () => {
+        //login
         firebase.auth().onAuthStateChanged(user => {
           if (user) {
-            dispatch(login(user))
+            dispatch(auth.login(user))
           }
         })
+        //fetch
+        dispatch(messages.fetch())
       },
     })
   ),
   lifecycle<Props, {}>({
     componentDidMount() {
-      const { login } = this.props
-      if ( login ) {
-        login()
-      }
+      const { init } = this.props
+      init()
     },
   })
 )(App)
