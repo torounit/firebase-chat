@@ -1,4 +1,4 @@
-import { put, call, takeEvery } from "redux-saga/effects"
+import { call, put, takeEvery } from "redux-saga/effects"
 import { Action } from "typescript-fsa"
 import { Message } from "./state"
 import { database } from "../../firebase"

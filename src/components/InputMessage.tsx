@@ -1,4 +1,4 @@
-import React, { ChangeEvent, SyntheticEvent } from "react"
+import React from "react"
 import { AppBar, Button, TextField, Toolbar } from "@material-ui/core"
 import { withStyles } from "@material-ui/core/styles"
 import { compose, withHandlers, withState } from "recompose"

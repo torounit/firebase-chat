@@ -3,9 +3,8 @@ import { connect } from "react-redux"
 
 import InputMessage, { Props } from "../components/InputMessage"
 import { AppState } from "../store"
-import { Message } from "../store/messages/state"
 import { Dispatch } from "redux"
-import { add, remove } from "../store/messages/actions"
+import { add } from "../store/messages/actions"
 
 interface StateProps {
   uid: string

@@ -1,5 +1,5 @@
 import { reducerWithInitialState } from "typescript-fsa-reducers"
-import { add, remove, receive } from "./actions"
+import { add, receive, remove } from "./actions"
 
 export interface Message {
   content: string
