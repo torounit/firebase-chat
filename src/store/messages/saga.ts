@@ -5,12 +5,10 @@ import { database } from "../../firebase"
 import { receive } from "./actions"
 import { eventChannel } from "redux-saga"
 
-const threadName = "general"
-const messagesPath = `messages/${threadName}`
-
-const messageChannel = () => {
-  const ref = database.ref(messagesPath)
+const messageChannel = (threadName:string = "general") => {
   return eventChannel(emit => {
+    const messagesPath = `messages/${threadName}`
+    const ref = database.ref(messagesPath)
     ref.on("value", snapshot => {
       if (snapshot) {
         const messagesMap = snapshot.val() || {}
@@ -25,8 +23,10 @@ const messageChannel = () => {
   })
 }
 
-const subscribeMessages = function*() {
-  const channel = yield call(messageChannel)
+const subscribeMessages = function*(action: Action<string>) {
+  const threadName = action.payload
+  console.log(threadName)
+  const channel = yield call(messageChannel, threadName)
   try {
     while (true) {
       const messages = yield take(channel)
@@ -42,14 +42,18 @@ const subscribeMessages = function*() {
   }
 }
 
-const addMessage = function*(action: Action<Message>) {
-  const message = action.payload
+const addMessage = function*(action: Action<{ thread: string; message: Message }>) {
+  const message = action.payload.message
+  const threadName = action.payload.thread
+  const messagesPath = `messages/${threadName}`
   yield call(message => database.ref(messagesPath).push(message), message)
 }
 
-const removeMessage = function*(action: Action<string>) {
-  const id = action.payload
-  if (id) {
+const removeMessage = function*(action: Action<{ thread: string; id: string }>) {
+  const id = action.payload.id
+  const threadName = action.payload.thread
+  const messagesPath = `messages/${threadName}`
+  if (id && threadName) {
     yield call(id => {
       return database
         .ref(`${messagesPath}/${id}`)

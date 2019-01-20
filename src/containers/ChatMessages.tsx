@@ -14,11 +14,17 @@ const ChatMessages = compose<StateProps & DispatchProps, {}>(
       messages: state.messages,
       auth: state.auth,
       users: state.users,
+      thread: state.threads.find(({ isActive }) => Boolean(isActive)),
     }),
     (dispatch: Dispatch): DispatchProps & DispatchProp => ({
       dispatch,
-      onRemove: id => {
-        dispatch(remove(id))
+      onRemove: (threadName, id) => {
+        dispatch(
+          remove({
+            thread: threadName,
+            id: id,
+          })
+        )
       },
     })
   ),

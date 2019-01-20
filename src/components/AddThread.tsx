@@ -2,71 +2,71 @@ import React from "react"
 import {
   Button,
   FormControl,
-  Modal,
   StyledComponentProps,
   TextField,
-  Typography,
   withStyles,
 } from "@material-ui/core"
 import { compose, withHandlers, withState } from "recompose"
 
 export interface StateProps {
-  isOpen: boolean
 }
 
 export interface DispatchProps {
-  handleOpen: () => void
-  handleClose: () => void
+  onSubmit: (threadName: string) => void
 }
 
 export type Props = StateProps & DispatchProps & StyledComponentProps
 
-const AddThread: React.FC<Props> = ({ handleOpen, handleClose, isOpen, classes = {} }) => (
-  <div>
-    <Button onClick={() => handleOpen()}>Open Modal</Button>
-    <Modal
-      aria-labelledby="simple-modal-title"
-      aria-describedby="simple-modal-description"
-      open={isOpen}
-      onClose={() => handleClose()}
-    >
-      <div className={classes.modal}>
-        <Typography variant="h6" id="modal-title">Add Tread</Typography>
-        <FormControl>
-          <TextField required label="Thread Name" defaultValue="" margin="normal" />
-        </FormControl>
-      </div>
-    </Modal>
-  </div>
-)
-
 interface WithStateProps {
-  isOpen: boolean
-  updateOpen: (f: (status: boolean) => boolean) => void
+  threadName: string
+  updateThreadName: (f: (threadName: string) => string) => void
 }
 
-interface WithHandlerProps {}
+interface WithHandlerProps {
+  onChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  onFormSubmit: () => void
+}
 
-type Props = StateProps & DispatchProps & StyledComponentProps
-type FCProps = Props & WithStateProps & WithHandlerProps
+type ComposedProps = WithStateProps & WithHandlerProps
+type FCProps = ComposedProps & Props & StyledComponentProps
 
-export default compose<Props, {}>(
-  withStyles(theme => ({
-    modal: {
-      width: theme.spacing.unit * 50,
-      backgroundColor: theme.palette.background.paper,
-      boxShadow: theme.shadows[5],
-      padding: theme.spacing.unit * 4,
-      outline: "none",
-      top: `50%`,
-      left: `50%`,
-      position: "absolute" as "absolute",
-      transform: `translate(-50%, -50%)`,
+const AddThread: React.FC<FCProps> = ({ classes = {}, onChange, onFormSubmit }) => (
+  <FormControl className={classes.container}>
+    <TextField className={classes.field} onChange={onChange} required label="Thread Name" defaultValue="" margin="normal"/>
+    <Button color="inherit" onClick={() => onFormSubmit()}>
+      Create
+    </Button>
+  </FormControl>
+)
+
+//compose<InputProps, OutputProps>
+export default compose<FCProps, Props>(
+  withStyles({
+    container: {
+      display: 'flex',
+      flexWrap: 'nowrap',
+      flexDirection:'row',
     },
-  })),
-  withState<WithStateProps, boolean, string, string>("isOpen", "updateOpen", false),
+    field: {
+      width: '100%',
+      flexGrow:1
+    }
+  }),
+  withState<WithStateProps, string, string, string>("threadName", "updateThreadName", ""),
   withHandlers<FCProps, WithHandlerProps>({
-    handleOpen: ({ updateOpen }) => () => updateOpen(() => true),
-    handleClose: ({ updateOpen }) => () => updateOpen(() => false),
-  })
+    onChange: ({ updateThreadName }) => event => {
+      console.log(event.target.value)
+      // @ts-ignore
+      if (!event.isComposing) {
+        let value = event.target.value
+        updateThreadName(() => value)
+      }
+    },
+    onFormSubmit: ({ threadName, onSubmit, updateThreadName }) => () => {
+      if (threadName.trim()) {
+        onSubmit(threadName.trim())
+        updateThreadName(() => "")
+      }
+    },
+  }),
 )(AddThread)

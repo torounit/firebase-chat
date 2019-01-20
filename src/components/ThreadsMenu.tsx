@@ -9,6 +9,7 @@ import {
   withStyles,
 } from "@material-ui/core"
 import { Thread } from "../store/threads"
+import { NavLink } from "react-router-dom"
 
 export interface StateProps {
   open: boolean
@@ -38,9 +39,11 @@ const ThreadsMenu: React.FC<FCProps> = ({ open, handleToggleDrawer, threads, chi
     >
       <List subheader={<ListSubheader>Thread</ListSubheader>}>
         {threads.map(({ name, title }) => (
-          <ListItem button key={name}>
-            <ListItemText primary={title} />
-          </ListItem>
+          <NavLink key={name} to={`/thread/${name}`} style={{ textDecoration: "none", color: "unset" }}>
+            <ListItem button  dense>
+              <ListItemText primary={title} />
+            </ListItem>
+          </NavLink>
         ))}
       </List>
       {children}

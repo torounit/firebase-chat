@@ -1,11 +1,11 @@
 import { reducerWithInitialState } from "typescript-fsa-reducers"
-import { add, select } from "./actions"
+import { add, select, sync } from "./actions"
 
 export interface Thread {
   name: string
   title: string
   private: boolean
-  isActive: boolean
+  isActive?: boolean
   users?: []
 }
 
@@ -19,12 +19,15 @@ const general: Thread = {
 const initialState: Thread[] = [general]
 
 export const reducer = reducerWithInitialState<Thread[]>(initialState)
-  .case(add, (state, payload: Thread) => [...state, payload])
-  .case(
-    select,
-    (state, name: string) =>
-      state.map(thread => ({
-        ...thread,
-        isActive: thread.name === name,
-      }))
+  .case(add, (state, payload: Thread) => {
+    return [...state, payload]
+  })
+  .case(sync, (state, payload: Thread[]) => {
+    return [general, ...payload]
+  })
+  .case(select, (state, name: string) =>
+    state.map(thread => ({
+      ...thread,
+      isActive: thread.name === name,
+    }))
   )

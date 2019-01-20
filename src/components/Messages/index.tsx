@@ -10,16 +10,18 @@ import Single from "./Single"
 import { isEqual } from "lodash"
 import { User } from "../../store/users/state"
 import { Auth } from "../../store/auth/state"
+import { Thread } from "../../store/threads"
 
 export interface StateProps {
   messages: Message[]
   users: User[]
   auth: Auth
+  thread?:Thread
 }
 
 export interface DispatchProps {
   onReply?: (id: string) => void
-  onRemove?: (id: string) => void
+  onRemove?: (threadName:string, id:string) => void
 }
 
 export type Props = StateProps & DispatchProps
@@ -118,9 +120,9 @@ export default compose<ComponentProps, Props>(
     },
   })),
   withHandlers<ComponentProps, WithHandlerProps>({
-    remove: ({ onRemove }) => id => {
-      if (onRemove) {
-        onRemove(id)
+    remove: ({ onRemove, thread }) => id => {
+      if (onRemove && thread && thread.name) {
+        onRemove(thread.name, id)
       }
     },
     reply: ({ onReply }) => id => {},
