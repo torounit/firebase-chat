@@ -108,10 +108,6 @@ class Messages extends React.Component<ComponentProps, ComponentState> {
 export default compose<ComponentProps, Props>(
   withStyles(theme => ({
     root: {
-      flexGrow: 1,
-      height: "100%",
-      overflow: "scroll",
-      padding: `0 ${theme.spacing.unit * 4}px`,
     },
     list: {
       padding: `0`,

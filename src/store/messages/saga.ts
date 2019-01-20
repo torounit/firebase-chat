@@ -27,7 +27,6 @@ const messageChannel = () => {
 
 const subscribeMessages = function*() {
   const channel = yield call(messageChannel)
-  console.log(channel)
   try {
     while (true) {
       const messages = yield take(channel)

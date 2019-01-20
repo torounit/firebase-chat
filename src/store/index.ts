@@ -18,7 +18,8 @@ const rootSaga = function*() {
   yield all([
     ...messages.saga,
     ...users.saga,
-    ...threads.saga
+    ...threads.saga,
+    ...auth.saga
   ])
 }
 const sagaMiddleware = createSagaMiddleware()

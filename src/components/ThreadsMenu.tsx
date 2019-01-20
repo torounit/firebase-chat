@@ -1,11 +1,11 @@
 import React from "react"
 import {
+  Drawer,
   List,
   ListItem,
   ListItemText,
   ListSubheader,
   StyledComponentProps,
-  SwipeableDrawer,
   withStyles,
 } from "@material-ui/core"
 import { Thread } from "../store/threads"
@@ -22,12 +22,12 @@ export interface DispatchProps {
 export type Props = StateProps & DispatchProps & StyledComponentProps
 type FCProps = Props
 
-const ThreadsMenu: React.FC<FCProps> = ({ open, handleToggleDrawer, threads, classes = {} }) => (
-  <SwipeableDrawer
+const ThreadsMenu: React.FC<FCProps> = ({ open, handleToggleDrawer, threads, children, classes = {} }) => (
+  <Drawer
     open={open}
     className={classes.root}
     onClose={() => handleToggleDrawer(false)}
-    onOpen={() => handleToggleDrawer(true)}
+    //onOpen={() => handleToggleDrawer(true)}
   >
     <div
       className={classes.root}
@@ -36,22 +36,26 @@ const ThreadsMenu: React.FC<FCProps> = ({ open, handleToggleDrawer, threads, cla
       onClick={() => handleToggleDrawer(false)}
       onKeyDown={() => handleToggleDrawer(false)}
     >
-      <List subheader={<ListSubheader>Thread</ListSubheader>} >
+      <List subheader={<ListSubheader>Thread</ListSubheader>}>
         {threads.map(({ name, title }) => (
-          <ListItem button key={name} dense>
+          <ListItem button key={name}>
             <ListItemText primary={title} />
           </ListItem>
         ))}
       </List>
+      {children}
     </div>
-  </SwipeableDrawer>
+  </Drawer>
 )
 
-export default withStyles({
+export default withStyles(themes => ({
   root: {
     width: 250,
   },
   body: {
-    width: '100%'
+    width: 250,
+  },
+  grow: {
+
   }
-})(ThreadsMenu)
+}))(ThreadsMenu)
