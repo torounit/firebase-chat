@@ -1,39 +1,45 @@
-import { call, put, takeEvery } from "redux-saga/effects"
+import { call, cancelled, put, take, takeEvery, takeLatest } from "redux-saga/effects"
 import { Action } from "typescript-fsa"
 import { Message } from "./state"
 import { database } from "../../firebase"
 import { receive } from "./actions"
-
-import * as firebase from "firebase/app"
-
-type DataSnapshot = firebase.database.DataSnapshot | null
+import { eventChannel } from "redux-saga"
 
 const ref = database.ref("messages")
 
-const fetch = () => {
-  return new Promise((resolve, reject) => {
-    ref.off()
-    ref.on(
-      "value",
-      (snapshot: DataSnapshot) => {
-        if (snapshot) {
-          const messages = snapshot.val() || []
-          resolve({
-            messages: Object.entries(messages).map(([id, value]) => ({ ...value, id })),
-          })
-          reject([])
-        }
-      },
-      (result: Object) => {
-        reject(result)
+const messageChannel = () => {
+  return eventChannel(emit => {
+    ref.on("value", snapshot => {
+      if (snapshot) {
+        const messagesMap = snapshot.val() || {}
+        const messages = Object.entries(messagesMap).map(([id, value]) => ({ ...value, id }))
+        emit(messages)
       }
-    )
+    })
+
+    return () => {
+      ref.off()
+    }
   })
 }
 
-const fetchMessages = function*() {
-  const { messages } = yield call(fetch)
-  yield put(receive(messages))
+const subscribeMessages = function*() {
+  console.log("watching")
+  const channel = yield call(messageChannel)
+  console.log(channel)
+  try {
+    while (true) {
+      const messages = yield take(channel)
+
+      if (messages) {
+        yield put(receive(messages))
+      }
+    }
+  } finally {
+    if (yield cancelled()) {
+      channel.close()
+    }
+  }
 }
 
 const addMessage = function*(action: Action<Message>) {
@@ -48,10 +54,8 @@ const removeMessage = function*(action: Action<string>) {
   }
 }
 
-const saga = [
-  takeEvery("FETCH_MESSAGES", fetchMessages),
+export default [
+  takeLatest("SUBSCRIBE_MESSAGES", subscribeMessages),
   takeEvery("ADD_MESSAGE", addMessage),
   takeEvery("REMOVE_MESSAGE", removeMessage),
 ]
-
-export default saga

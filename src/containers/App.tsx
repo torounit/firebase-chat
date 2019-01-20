@@ -70,7 +70,7 @@ export default compose<Props, {}>(
       firebase.auth().onAuthStateChanged(user => {
         if (user) {
           dispatch(authActions.login(user))
-          dispatch(messagesActions.fetch())
+          dispatch(messagesActions.subscribe())
         } else {
           dispatch(authActions.logout())
         }
