@@ -15,30 +15,25 @@ import { AccountCircle, Menu as MenuIcon } from "@material-ui/icons"
 
 import { compose, withHandlers, withState } from "recompose"
 import { Auth } from "../../store/auth"
-import ThreadsMenu from "./ThreadsMenu"
-import { Thread } from "../../store/threads"
 
 export interface StateProps {
   user: Auth
-  threads: Thread[]
 }
 
 export interface DispatchProps {
   onLogin: () => void
   onLogout: () => void
+  handleSideMenuToggle: (status: boolean) => void
 }
 
 interface WithStateProps {
   anchorEl: HTMLElement | null
   setAnchorEl: (f: (anchorEl: any) => HTMLElement | null) => void
-  isSideMenuOpen: boolean
-  updateSideMenuOpen: (f: (status: boolean) => boolean) => void
 }
 
 interface WithHandlerProps {
   handleUserMenuOpen: () => void
   handleUserMenuClose: () => void
-  handleSideMenuToggle: (status: boolean) => void
 }
 
 export type Props = StateProps & DispatchProps & StyledComponentProps
@@ -54,9 +49,8 @@ const Header: React.FC<FCProps> = ({
   handleUserMenuOpen,
   handleUserMenuClose,
   anchorEl,
-  isSideMenuOpen,
   handleSideMenuToggle,
-  threads,
+  children,
 }) => (
   <div>
     <AppBar position={"static"}>
@@ -102,7 +96,7 @@ const Header: React.FC<FCProps> = ({
         Logout
       </MenuItem>
     </Menu>
-    <ThreadsMenu threads={threads} open={isSideMenuOpen} handleToggleDrawer={handleSideMenuToggle} />
+    {children}
   </div>
 )
 
@@ -113,11 +107,9 @@ const enhancer = compose<FCProps, Props>(
     },
   }),
   withState<WithStateProps, HTMLElement | null, string, string>("anchorEl", "setAnchorEl", null),
-  withState<WithStateProps, boolean, string, string>("isSideMenuOpen", "updateSideMenuOpen", false),
   withHandlers<FCProps, WithHandlerProps>({
     handleUserMenuOpen: ({ setAnchorEl }) => () => setAnchorEl(() => UserMenu),
     handleUserMenuClose: ({ setAnchorEl }) => () => setAnchorEl(() => null),
-    handleSideMenuToggle: ({ updateSideMenuOpen }) => status => updateSideMenuOpen(() => status),
   })
 )
 

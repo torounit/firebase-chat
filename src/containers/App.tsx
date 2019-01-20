@@ -2,7 +2,7 @@ import React from "react"
 import * as firebase from "firebase/app"
 import "firebase/auth"
 
-import { compose, lifecycle } from "recompose"
+import { compose, lifecycle, withHandlers, withState } from "recompose"
 import { connect, DispatchProp } from "react-redux"
 
 import withTheme from "../utils/hoc/withTheme"
@@ -15,22 +15,34 @@ import AppHeader from "./AppHeader"
 import ChatMessages from "./ChatMessages"
 import ChatInputter from "./ChatInputter"
 import { CssBaseline, Grid, StyledComponentProps, withStyles } from "@material-ui/core"
-import { Message } from "../store/messages/state"
-import { Auth } from "../store/auth/state"
+import { Message } from "../store/messages"
+import { Auth } from "../store/auth"
+import AppDrawerMenu from "./AppDrawerMenu"
 
 interface StateProps {
   auth: Auth
   messages: Message[]
 }
 
-type Props = StateProps & DispatchProp & StyledComponentProps
+interface WithStateProps {
+  isSideMenuOpen: boolean
+  updateSideMenuOpen: (f: (status: boolean) => boolean) => void
+}
 
-const App: React.FC<Props> = ({ auth, classes = {} }) => (
+interface WithHandlerProps {
+  handleSideMenuToggle: (status: boolean) => void
+}
+
+type Props = StateProps & DispatchProp & StyledComponentProps
+type FCProps = Props & WithStateProps & WithHandlerProps
+const App: React.FC<FCProps> = ({ auth, isSideMenuOpen, handleSideMenuToggle, classes = {} }) => (
   <div className="App">
     <CssBaseline />
     <Grid className={classes.container} container wrap="nowrap" direction="column" justify="center">
       <Grid item>
-        <AppHeader />
+        <AppHeader handleSideMenuToggle={handleSideMenuToggle}>
+          <AppDrawerMenu open={isSideMenuOpen} handleToggleDrawer={handleSideMenuToggle} />
+        </AppHeader>
       </Grid>
       <Grid item className={classes.main}>
         {auth.uid && <ChatMessages />}
@@ -42,7 +54,7 @@ const App: React.FC<Props> = ({ auth, classes = {} }) => (
   </div>
 )
 
-export default compose<Props, {}>(
+export default compose<FCProps, {}>(
   withTheme,
   withStyles(theme => ({
     container: {
@@ -56,13 +68,17 @@ export default compose<Props, {}>(
       margin: `${theme.spacing.unit}px 0`,
     },
   })),
+  withState<WithStateProps, boolean, string, string>("isSideMenuOpen", "updateSideMenuOpen", false),
+  withHandlers<FCProps, WithHandlerProps>({
+    handleSideMenuToggle: ({ updateSideMenuOpen }) => status => updateSideMenuOpen(() => status),
+  }),
   connect<StateProps, DispatchProp, {}, AppState>(
     (state: AppState): StateProps => ({
       auth: state.auth,
       messages: state.messages,
     })
   ),
-  lifecycle<Props, {}>({
+  lifecycle<FCProps, {}>({
     componentDidMount() {
       const { dispatch } = this.props
       //login

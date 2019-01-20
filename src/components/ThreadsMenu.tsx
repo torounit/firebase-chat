@@ -8,7 +8,7 @@ import {
   SwipeableDrawer,
   withStyles,
 } from "@material-ui/core"
-import { Thread } from "../../store/threads"
+import { Thread } from "../store/threads"
 
 export interface StateProps {
   open: boolean
