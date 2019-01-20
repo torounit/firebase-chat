@@ -1,4 +1,4 @@
-import { call, cancelled, put, take, takeEvery, takeLatest } from "redux-saga/effects"
+import { call, cancelled, ForkEffect, put, take, takeEvery, takeLatest } from "redux-saga/effects"
 import { Action } from "typescript-fsa"
 import { Message } from "./state"
 import { database } from "../../firebase"
@@ -24,7 +24,6 @@ const messageChannel = () => {
 }
 
 const subscribeMessages = function*() {
-  console.log("watching")
   const channel = yield call(messageChannel)
   console.log(channel)
   try {
@@ -50,12 +49,19 @@ const addMessage = function*(action: Action<Message>) {
 const removeMessage = function*(action: Action<string>) {
   const id = action.payload
   if (id) {
-    yield call(id => database.ref(`messages/${id}`).remove(), id)
+    yield call(id => {
+      return database
+        .ref(`messages/${id}`)
+        .remove()
+        .catch((err: Error) => console.log(err.message))
+    }, id)
   }
 }
 
-export default [
+const effects: ForkEffect[] = [
   takeLatest("SUBSCRIBE_MESSAGES", subscribeMessages),
   takeEvery("ADD_MESSAGE", addMessage),
   takeEvery("REMOVE_MESSAGE", removeMessage),
 ]
+
+export default effects
