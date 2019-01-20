@@ -30,7 +30,7 @@ const InputMessage: React.FC<FCProps> = ({ classes = {}, onChange, send, message
         multiline
         fullWidth
         value={message.content}
-        rows="4"
+        rows="3"
         margin="normal"
         onChange={event => onChange(event)}
         onKeyDown={event => {

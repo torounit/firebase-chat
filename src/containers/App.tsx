@@ -14,7 +14,7 @@ import { UserInfo } from "firebase"
 import AppHeader from "./AppHeader"
 import ChatMessages from "./ChatMessages"
 import ChatInputter from "./ChatInputter"
-import { Grid, StyledComponentProps, withStyles } from "@material-ui/core"
+import { CssBaseline, Grid, StyledComponentProps, withStyles } from "@material-ui/core"
 import { Message } from "../store/messages/state"
 
 interface StateProps {
@@ -27,6 +27,7 @@ type Props = StateProps & DispatchProp & StyledComponentProps
 
 const App: React.FC<Props> = ({ auth, classes = {} }) => (
   <div className="App">
+    <CssBaseline />
     <Grid className={classes.container} container wrap="nowrap" direction="column" justify="center">
       <Grid item>
         <AppHeader />
@@ -43,7 +44,7 @@ const App: React.FC<Props> = ({ auth, classes = {} }) => (
 
 export default compose<Props, {}>(
   withTheme,
-  withStyles({
+  withStyles( theme => ({
     container: {
       height: "100vh",
     },
@@ -52,8 +53,10 @@ export default compose<Props, {}>(
       flexShrink: 1,
       overflow: "hidden",
       height: "100vh",
+      margin: `${theme.spacing.unit}px 0`,
+
     },
-  }),
+  })),
   connect<StateProps, DispatchProp, {}, AppState>(
     (state: AppState): StateProps => ({
       auth: state.auth,

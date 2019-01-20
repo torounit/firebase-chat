@@ -3,7 +3,12 @@ import { colors, createMuiTheme, CssBaseline, MuiThemeProvider } from "@material
 
 const { purple, green } = colors
 const theme = createMuiTheme({
-  palette: {},
+  palette: {
+    background: {
+      paper: "#fff",
+      default: "#ddd",
+    },
+  },
   typography: {
     useNextVariants: true,
   },
