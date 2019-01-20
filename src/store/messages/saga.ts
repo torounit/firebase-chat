@@ -5,9 +5,13 @@ import { database } from "../../firebase"
 import { receive } from "./actions"
 import { eventChannel } from "redux-saga"
 
-const ref = database.ref("messages")
+
+const threadName = 'general'
+const threadPath = `threads/${threadName}`
+const messagesPath = `${threadPath}/messages`
 
 const messageChannel = () => {
+  const ref = database.ref(messagesPath)
   return eventChannel(emit => {
     ref.on("value", snapshot => {
       if (snapshot) {
@@ -43,7 +47,7 @@ const subscribeMessages = function*() {
 
 const addMessage = function*(action: Action<Message>) {
   const message = action.payload
-  yield call(message => ref.push(message), message)
+  yield call(message => database.ref(messagesPath).push(message), message)
 }
 
 const removeMessage = function*(action: Action<string>) {
@@ -51,7 +55,7 @@ const removeMessage = function*(action: Action<string>) {
   if (id) {
     yield call(id => {
       return database
-        .ref(`messages/${id}`)
+        .ref(`${messagesPath}/${id}`)
         .remove()
         .catch((err: Error) => console.log(err.message))
     }, id)

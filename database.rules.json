@@ -2,10 +2,14 @@
   "rules": {
     ".read": false,
     ".write": false,
-    "messages": {
-      ".read": "auth != null",
-      "$message_id": {
-        ".write": "(!data.exists() && newData.exists()) || (data.child('authorUid').val() == auth.uid)"
+    "threads": {
+      "$thread_id" : {
+        "messages": {
+          ".read": "auth != null",
+          "$message_id": {
+            ".write": "(!data.exists() && newData.exists()) || (data.child('authorUid').val() == auth.uid)"
+          }
+        }
       }
     },
     "users": {
