@@ -1,5 +1,5 @@
-import React, { Fragment } from "react"
-import { CssBaseline, Fab, Paper, StyledComponentProps } from "@material-ui/core"
+import React from "react"
+import { IconButton, List, ListSubheader, StyledComponentProps } from "@material-ui/core"
 import { withStyles } from "@material-ui/core/styles"
 import { Message } from "../../store/messages/state"
 import { Delete } from "@material-ui/icons"
@@ -7,6 +7,7 @@ import { compose, withHandlers } from "recompose"
 import { DispatchProp } from "react-redux"
 import { UserInfo } from "firebase"
 import Single from "./Single"
+import { isEqual } from "lodash"
 
 export interface StateProps {
   messages: Message[]
@@ -61,28 +62,35 @@ class Messages extends React.Component<ComponentProps, ComponentState> {
     const { classes = {}, messages, remove, users } = this.props
     return (
       <div className={classes.root} ref={el => (this.elemment = el)}>
-        <CssBaseline />
-        {messages.map((message, index) => (
-          <Fragment key={index}>
-            <Paper className={classes.paper}>
+        <List className={classes.list}>
+          {messages.reduce((acc: React.ReactElement<any>[], message) => {
+            const date = new Date(message.createdAt as number)
+            date.setMinutes(0, 0, 0)
+            const header = (
+              <ListSubheader key={`header${message.id}`} className={classes.subheader}>
+                {date.toLocaleString()}
+              </ListSubheader>
+            )
+            const single = (
               <Single
                 key={message.id}
                 message={message}
                 author={users.find(({ uid }) => uid === message.authorUid)}
                 actions={
-                  <Fab
-                    size="small"
+                  <IconButton
+                    aria-label="Delete"
                     onClick={() => {
                       remove(message.id)
                     }}
                   >
                     <Delete />
-                  </Fab>
+                  </IconButton>
                 }
               />
-            </Paper>
-          </Fragment>
-        ))}
+            )
+            return acc.find(el => isEqual(el.props.children, header.props.children)) ? [...acc, single] : [...acc, header, single]
+          }, [])}
+        </List>
       </div>
     )
   }
@@ -96,9 +104,12 @@ export default compose<ComponentProps, Props>(
       overflow: "scroll",
       padding: `0 ${theme.spacing.unit * 4}px`,
     },
-    paper: {
-      margin: `${theme.spacing.unit}px`,
-      padding: theme.spacing.unit * 2,
+    list: {
+      padding: `0`,
+      backgroundColor: "#fff",
+    },
+    subheader: {
+      backgroundColor: "#eee",
     },
   })),
   withHandlers<ComponentProps, WithHandlerProps>({
