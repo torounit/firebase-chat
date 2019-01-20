@@ -13,8 +13,8 @@ export const initialState: Auth = {
   uid: "",
 }
 
-export const reducer = reducerWithInitialState(initialState)
-  .case(login, (state: any, user) => {
+export const reducer = reducerWithInitialState<Auth>(initialState)
+  .case(login, (state: Auth, user) => {
     return {
       ...state,
       ...user,

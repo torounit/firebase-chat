@@ -6,8 +6,7 @@ import { receive } from "./actions"
 import { eventChannel } from "redux-saga"
 
 const threadName = "general"
-const threadPath = `threads/${threadName}`
-const messagesPath = `${threadPath}/messages`
+const messagesPath = `messages/${threadName}`
 
 const messageChannel = () => {
   const ref = database.ref(messagesPath)

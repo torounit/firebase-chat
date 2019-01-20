@@ -4,11 +4,15 @@
     ".write": false,
     "threads": {
       "$thread_id" : {
-        "messages": {
-          ".read": "auth != null",
-          "$message_id": {
-            ".write": "(!data.exists() && newData.exists()) || (data.child('authorUid').val() == auth.uid)"
-          }
+        ".read": "auth != null",
+        ".write": "auth != null"
+      }
+    },
+    "messages": {
+      "$thread_id" : {
+        ".read": "auth != null",
+        "$message_id": {
+          ".write": "(!data.exists() && newData.exists()) || (data.child('authorUid').val() == auth.uid)"
         }
       }
     },

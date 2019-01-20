@@ -8,6 +8,7 @@ import { AppState } from "../store"
 const AppHeader = connect(
   (state: AppState): StateProps => ({
     user: state.auth,
+    threads: state.threads
   }),
   (): DispatchProps => ({
     onLogin: () => {

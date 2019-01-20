@@ -1,30 +1,25 @@
 import { applyMiddleware, combineReducers, compose, createStore } from "redux"
 import createSagaMiddleware from "redux-saga"
-import * as auth from "./auth/state"
-import { Auth } from "./auth/state"
-import * as messages from "./messages/state"
-import { Message } from "./messages/state"
-import * as users from "./users/state"
-import { User } from "./users/state"
+import * as auth from "./auth"
+import * as messages from "./messages"
+import * as users from "./users"
+import * as threads from "./threads"
 
 import { all } from "redux-saga/effects"
-import messagesSaga from "./messages/saga"
-import usersSaga from "./users/saga"
 
 export type AppState = {
-  messages: Message[]
-  auth: Auth
-  users: User[]
-}
-
-const initialState = {
-  auth: {},
-  messages: [],
-  users: [],
+  messages: messages.Message[]
+  auth: auth.Auth
+  users: users.User[]
+  threads: threads.Thread[]
 }
 
 const rootSaga = function*() {
-  yield all([...messagesSaga, ...usersSaga])
+  yield all([
+    ...messages.saga,
+    ...users.saga,
+    ...threads.saga
+  ])
 }
 const sagaMiddleware = createSagaMiddleware()
 
@@ -33,8 +28,9 @@ export const store = createStore(
     auth: auth.reducer,
     messages: messages.reducer,
     users: users.reducer,
+    threads: threads.reducer
   }),
-  initialState,
+  {},
   compose(
     ...[
       applyMiddleware(sagaMiddleware),
