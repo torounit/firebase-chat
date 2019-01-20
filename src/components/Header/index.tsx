@@ -65,7 +65,9 @@ const Header: React.FC<FCProps> = ({
         >
           <MenuIcon />
         </IconButton>
-        <Typography color="inherit" variant="h6" className={classes.grow}>{title}</Typography>
+        <Typography color="inherit" variant="h6" className={classes.grow}>
+          {title}
+        </Typography>
 
         {user.displayName ? (
           <div ref={el => (UserMenu = el)} onClick={handleUserMenuOpen}>

@@ -93,10 +93,10 @@ export default compose<FCProps, {}>(
   }),
   connect<StateProps, DispatchProp, {}, AppState>(
     (state: AppState): StateProps => {
-      const thread = state.threads.find(({ isActive }) => !! isActive)
-      return ({
-        title: thread? thread.name : '',
-      })
+      const thread = state.threads.find(({ isActive }) => !!isActive)
+      return {
+        title: thread ? thread.name : "",
+      }
     }
   )
 )(App)

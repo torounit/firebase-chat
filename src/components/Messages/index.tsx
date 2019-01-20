@@ -16,12 +16,12 @@ export interface StateProps {
   messages: Message[]
   users: User[]
   auth: Auth
-  thread?:Thread
+  thread?: Thread
 }
 
 export interface DispatchProps {
   onReply?: (id: string) => void
-  onRemove?: (threadName:string, id:string) => void
+  onRemove?: (threadName: string, id: string) => void
 }
 
 export type Props = StateProps & DispatchProps
@@ -111,10 +111,10 @@ export default compose<ComponentProps, Props>(
   withStyles(theme => ({
     root: {
       flexShrink: 1,
-      flexGrow:1,
+      flexGrow: 1,
       overflow: "scroll",
       height: "100%",
-      padding: `0 ${theme.spacing.unit * 4}px ${theme.spacing.unit }px`,
+      padding: `0 ${theme.spacing.unit * 4}px ${theme.spacing.unit}px`,
     },
     list: {
       padding: `0`,

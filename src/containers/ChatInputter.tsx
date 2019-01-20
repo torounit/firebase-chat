@@ -34,7 +34,6 @@ export default connect<StateProps, any, {}, StateProps & DispatchProps, AppState
           })
         )
       }
-
     },
   })
 )(InputMessage)

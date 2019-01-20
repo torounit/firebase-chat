@@ -31,7 +31,7 @@ const subscribeAuth = function*() {
 
 const effects = [
   fork(function*() {
-    yield fork(subscribeAuth);
+    yield fork(subscribeAuth)
   }),
 ]
 

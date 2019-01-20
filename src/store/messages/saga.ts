@@ -5,7 +5,7 @@ import { database } from "../../firebase"
 import { receive } from "./actions"
 import { eventChannel } from "redux-saga"
 
-const messageChannel = (threadName:string = "general") => {
+const messageChannel = (threadName: string = "general") => {
   return eventChannel(emit => {
     const messagesPath = `messages/${threadName}`
     const ref = database.ref(messagesPath)

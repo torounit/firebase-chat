@@ -12,9 +12,11 @@ type Props = StateProps & DispatchProps & StyledComponentProps
 const Page: React.FC<Props> = ({ classes = {}, onSubmit }) => (
   <div className={classes.root}>
     <Paper className={classes.paper}>
-      <Typography variant="h5" id="modal-title">Add Tread</Typography>
+      <Typography variant="h5" id="modal-title">
+        Add Tread
+      </Typography>
       <div>
-        <AddThread onSubmit={onSubmit}/>
+        <AddThread onSubmit={onSubmit} />
       </div>
     </Paper>
   </div>
@@ -27,14 +29,14 @@ export default compose<Props, {}>(
     },
     paper: {
       padding: `${theme.spacing.unit * 2}px`,
-    }
+    },
   })),
   connect<StateProps, DispatchProps, {}, AppState>(
     (state: AppState): StateProps => ({}),
-    ( dispatch: Dispatch ) => ({
-      onSubmit: (threadName) => {
+    (dispatch: Dispatch) => ({
+      onSubmit: threadName => {
         const thread: Thread = {
-          name: threadName.replace(/\s+/g, '-').toLowerCase(),
+          name: threadName.replace(/\s+/g, "-").toLowerCase(),
           title: threadName,
           private: false,
         }
@@ -42,6 +44,5 @@ export default compose<Props, {}>(
         dispatch(threads.actions.add(thread))
       },
     })
-
-  ),
+  )
 )(Page)

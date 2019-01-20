@@ -15,12 +15,7 @@ export type AppState = {
 }
 
 const rootSaga = function*() {
-  yield all([
-    ...messages.saga,
-    ...users.saga,
-    ...threads.saga,
-    ...auth.saga
-  ])
+  yield all([...messages.saga, ...users.saga, ...threads.saga, ...auth.saga])
 }
 const sagaMiddleware = createSagaMiddleware()
 
@@ -29,7 +24,7 @@ export const store = createStore(
     auth: auth.reducer,
     messages: messages.reducer,
     users: users.reducer,
-    threads: threads.reducer
+    threads: threads.reducer,
   }),
   {},
   compose(

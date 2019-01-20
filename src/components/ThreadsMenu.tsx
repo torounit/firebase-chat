@@ -40,7 +40,7 @@ const ThreadsMenu: React.FC<FCProps> = ({ open, handleToggleDrawer, threads, chi
       <List subheader={<ListSubheader>Thread</ListSubheader>}>
         {threads.map(({ name, title, isActive }) => (
           <NavLink key={name} to={`/thread/${name}`} style={{ textDecoration: "none", color: "unset" }}>
-            <ListItem button  dense selected={isActive}>
+            <ListItem button dense selected={isActive}>
               <ListItemText primary={title} />
             </ListItem>
           </NavLink>
@@ -58,7 +58,5 @@ export default withStyles(themes => ({
   body: {
     width: 250,
   },
-  grow: {
-
-  }
+  grow: {},
 }))(ThreadsMenu)

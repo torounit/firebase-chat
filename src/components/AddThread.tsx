@@ -1,15 +1,8 @@
 import React from "react"
-import {
-  Button,
-  FormControl,
-  StyledComponentProps,
-  TextField,
-  withStyles,
-} from "@material-ui/core"
+import { Button, FormControl, StyledComponentProps, TextField, withStyles } from "@material-ui/core"
 import { compose, withHandlers, withState } from "recompose"
 
-export interface StateProps {
-}
+export interface StateProps {}
 
 export interface DispatchProps {
   onSubmit: (threadName: string) => void
@@ -32,7 +25,14 @@ type FCProps = ComposedProps & Props & StyledComponentProps
 
 const AddThread: React.FC<FCProps> = ({ classes = {}, onChange, onFormSubmit }) => (
   <FormControl className={classes.container}>
-    <TextField className={classes.field} onChange={onChange} required label="Thread Name" defaultValue="" margin="normal"/>
+    <TextField
+      className={classes.field}
+      onChange={onChange}
+      required
+      label="Thread Name"
+      defaultValue=""
+      margin="normal"
+    />
     <Button color="inherit" onClick={() => onFormSubmit()}>
       Create
     </Button>
@@ -43,14 +43,14 @@ const AddThread: React.FC<FCProps> = ({ classes = {}, onChange, onFormSubmit }) 
 export default compose<FCProps, Props>(
   withStyles({
     container: {
-      display: 'flex',
-      flexWrap: 'nowrap',
-      flexDirection:'row',
+      display: "flex",
+      flexWrap: "nowrap",
+      flexDirection: "row",
     },
     field: {
-      width: '100%',
-      flexGrow:1
-    }
+      width: "100%",
+      flexGrow: 1,
+    },
   }),
   withState<WithStateProps, string, string, string>("threadName", "updateThreadName", ""),
   withHandlers<FCProps, WithHandlerProps>({
@@ -68,5 +68,5 @@ export default compose<FCProps, Props>(
         updateThreadName(() => "")
       }
     },
-  }),
+  })
 )(AddThread)
