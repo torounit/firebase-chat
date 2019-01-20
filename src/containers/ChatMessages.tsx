@@ -20,7 +20,7 @@ const ChatMessages = compose<StateProps & DispatchProps, {}>(
       onRemove: id => {
         dispatch(remove(id))
       },
-    }),
+    })
   ),
   lifecycle<StateProps & DispatchProps & DispatchProp, {}>({
     componentDidUpdate(prevProps) {
@@ -34,7 +34,7 @@ const ChatMessages = compose<StateProps & DispatchProps, {}>(
         }
       }
     },
-  }),
+  })
 )(Messages)
 
 export default ChatMessages

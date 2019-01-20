@@ -74,26 +74,30 @@ class Messages extends React.Component<ComponentProps, ComponentState> {
                 {date.toLocaleString()}
               </ListSubheader>
             )
-            const author = users.find(({ uid }) => uid === message.authorUid);
+            const author = users.find(({ uid }) => uid === message.authorUid)
             const single = (
               <Single
                 key={message.id}
                 message={message}
                 author={author}
                 actions={
-                  author && author.uid === auth.uid &&
-                  <IconButton
-                    aria-label="Delete"
-                    onClick={() => {
-                      remove(message.id)
-                    }}
-                  >
-                    <Delete />
-                  </IconButton>
+                  author &&
+                  author.uid === auth.uid && (
+                    <IconButton
+                      aria-label="Delete"
+                      onClick={() => {
+                        remove(message.id)
+                      }}
+                    >
+                      <Delete />
+                    </IconButton>
+                  )
                 }
               />
             )
-            return acc.find(el => isEqual(el.props.children, header.props.children)) ? [...acc, single] : [...acc, header, single]
+            return acc.find(el => isEqual(el.props.children, header.props.children))
+              ? [...acc, single]
+              : [...acc, header, single]
           }, [])}
         </List>
       </div>

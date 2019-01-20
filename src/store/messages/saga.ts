@@ -5,8 +5,7 @@ import { database } from "../../firebase"
 import { receive } from "./actions"
 import { eventChannel } from "redux-saga"
 
-
-const threadName = 'general'
+const threadName = "general"
 const threadPath = `threads/${threadName}`
 const messagesPath = `${threadPath}/messages`
 

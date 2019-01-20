@@ -62,17 +62,17 @@ export default compose<FCProps, Props>(
   withState<WithStateProps, Message, "message", "updateMessage">("message", "updateMessage", initialMessage),
   withHandlers<FCProps, WithHandlerProps>({
     onChange: ({ updateMessage }) => event => {
-        // @ts-ignore
-        if (!event.isComposing) {
-          let value = event.target.value
-          updateMessage(message => ({ ...message, content: value }))
-        }
-      },
+      // @ts-ignore
+      if (!event.isComposing) {
+        let value = event.target.value
+        updateMessage(message => ({ ...message, content: value }))
+      }
+    },
     send: ({ message, onSend, updateMessage }) => () => {
       if (message) {
         onSend({
           ...message,
-          content: message.content.trim()
+          content: message.content.trim(),
         })
         updateMessage(() => initialMessage)
       }

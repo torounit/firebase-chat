@@ -8,10 +8,10 @@ const getUser = (uid: string) =>
     .ref(`/users/${uid}`)
     .once("value")
     .then(snapshot => {
-      return ({
+      return {
         ...snapshot.val(),
         uid,
-      })
+      }
     })
 
 const getUsers = (uids: string[]) => {

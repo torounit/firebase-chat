@@ -20,14 +20,11 @@ export type AppState = {
 const initialState = {
   auth: {},
   messages: [],
-  users: []
+  users: [],
 }
 
 const rootSaga = function*() {
-  yield all([
-    ...messagesSaga,
-    ...usersSaga
-  ])
+  yield all([...messagesSaga, ...usersSaga])
 }
 const sagaMiddleware = createSagaMiddleware()
 
@@ -35,13 +32,13 @@ export const store = createStore(
   combineReducers<AppState>({
     auth: auth.reducer,
     messages: messages.reducer,
-    users: users.reducer
+    users: users.reducer,
   }),
   initialState,
   compose(
     ...[
       applyMiddleware(sagaMiddleware),
-      (window as any).__REDUX_DEVTOOLS_EXTENSION__ && (window as any).__REDUX_DEVTOOLS_EXTENSION__()
+      (window as any).__REDUX_DEVTOOLS_EXTENSION__ && (window as any).__REDUX_DEVTOOLS_EXTENSION__(),
     ].filter(Boolean)
   )
 )

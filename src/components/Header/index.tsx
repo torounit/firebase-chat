@@ -13,7 +13,6 @@ import {
 import { withStyles } from "@material-ui/core/styles"
 import { AccountCircle } from "@material-ui/icons"
 
-
 import { compose, withHandlers, withState } from "recompose"
 import { Auth } from "../../store/auth/state"
 

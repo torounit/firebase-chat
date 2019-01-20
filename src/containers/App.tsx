@@ -25,7 +25,6 @@ interface StateProps {
 
 type Props = StateProps & DispatchProp & StyledComponentProps
 
-
 const App: React.FC<Props> = ({ auth, classes = {} }) => (
   <div className="App">
     <CssBaseline />
@@ -45,7 +44,7 @@ const App: React.FC<Props> = ({ auth, classes = {} }) => (
 
 export default compose<Props, {}>(
   withTheme,
-  withStyles( theme => ({
+  withStyles(theme => ({
     container: {
       height: "100vh",
     },
@@ -55,7 +54,6 @@ export default compose<Props, {}>(
       overflow: "hidden",
       height: "100vh",
       margin: `${theme.spacing.unit}px 0`,
-
     },
   })),
   connect<StateProps, DispatchProp, {}, AppState>(
