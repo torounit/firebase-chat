@@ -2,8 +2,9 @@ import { call, put, takeEvery } from "redux-saga/effects"
 import { Action } from "typescript-fsa"
 import { Message } from "./state"
 import { database } from "../../firebase"
-import * as firebase from "firebase/app"
 import { receive } from "./actions"
+
+import * as firebase from "firebase/app"
 
 type DataSnapshot = firebase.database.DataSnapshot | null
 

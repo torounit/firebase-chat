@@ -1,21 +1,16 @@
-import React, { Fragment, ReactNode } from "react"
-import {
-  Avatar,
-  CssBaseline,
-  Fab,
-  Grid,
-  Paper,
-  StyledComponentProps,
-  Typography,
-} from "@material-ui/core"
+import React, { Fragment } from "react"
+import { CssBaseline, Fab, Paper, StyledComponentProps } from "@material-ui/core"
 import { withStyles } from "@material-ui/core/styles"
-import { Message } from "../store/messages/state"
+import { Message } from "../../store/messages/state"
 import { Delete } from "@material-ui/icons"
 import { compose, withHandlers } from "recompose"
 import { DispatchProp } from "react-redux"
+import { UserInfo } from "firebase"
+import Single from "./Single"
 
 export interface StateProps {
   messages: Message[]
+  users: UserInfo[]
 }
 
 export interface DispatchProps {
@@ -32,21 +27,11 @@ interface WithHandlerProps {
 
 type ComponentProps = WithHandlerProps & Props & StyledComponentProps & DispatchProp
 
-const MessageComponent: React.FC<{ actions: ReactNode; message: Message }> = ({ message, children, actions }) => (
-  <Grid container wrap="nowrap" justify="center" alignItems={"flex-start"} spacing={16}>
-    <Grid item>
-      <Avatar>W</Avatar>
-    </Grid>
-    <Grid item xs>
-      <Typography style={{ whiteSpace: "pre-wrap" }}>{message.content}</Typography>
-      <Typography variant="caption">{new Date(message.createdAt as number).toLocaleString()}</Typography>
-      <Typography variant="caption">{message.authorUid}</Typography>
-    </Grid>
-    <Grid item>{actions}</Grid>
-  </Grid>
-)
+interface ComponentState {
+  height: number
+}
 
-class Messages extends React.Component<ComponentProps, { height: number }> {
+class Messages extends React.Component<ComponentProps, ComponentState> {
   elemment: HTMLElement | null
 
   constructor(props: ComponentProps, context: any) {
@@ -55,9 +40,8 @@ class Messages extends React.Component<ComponentProps, { height: number }> {
     this.state = { height: 0 }
   }
 
-  componentDidUpdate(prevProps: ComponentProps, prevState: { height: number }) {
-    const { dispatch, messages } = this.props
-    // scroll to bottom.
+  scrollToBottom(prevProps: ComponentProps, prevState: ComponentState) {
+    const { messages } = this.props
     if (this.elemment) {
       if (messages.length !== prevProps.messages.length) {
         if (prevState.height <= this.elemment.scrollTop + this.elemment.clientHeight) {
@@ -68,17 +52,23 @@ class Messages extends React.Component<ComponentProps, { height: number }> {
     }
   }
 
+  componentDidUpdate(prevProps: ComponentProps, prevState: ComponentState) {
+    // scroll to bottom.
+    this.scrollToBottom(prevProps, prevState)
+  }
+
   render(): React.ReactNode {
-    const { classes = {}, messages, remove } = this.props
+    const { classes = {}, messages, remove, users } = this.props
     return (
       <div className={classes.root} ref={el => (this.elemment = el)}>
         <CssBaseline />
         {messages.map((message, index) => (
           <Fragment key={index}>
             <Paper className={classes.paper}>
-              <MessageComponent
+              <Single
                 key={message.id}
                 message={message}
+                author={users.find(({ uid }) => uid === message.authorUid)}
                 actions={
                   <Fab
                     size="small"
