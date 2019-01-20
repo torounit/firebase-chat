@@ -12,6 +12,7 @@ const ChatMessages = compose<StateProps & DispatchProps, {}>(
   connect<StateProps, DispatchProps & DispatchProp, {}, AppState>(
     (state: AppState): StateProps => ({
       messages: state.messages,
+      auth: state.auth,
       users: state.users,
     }),
     (dispatch: Dispatch): DispatchProps & DispatchProp => ({

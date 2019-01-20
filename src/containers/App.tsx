@@ -10,15 +10,16 @@ import withTheme from "../utils/hoc/withTheme"
 import * as authActions from "../store/auth/actions"
 import * as messagesActions from "../store/messages/actions"
 import { AppState } from "../store"
-import { UserInfo } from "firebase"
+
 import AppHeader from "./AppHeader"
 import ChatMessages from "./ChatMessages"
 import ChatInputter from "./ChatInputter"
 import { CssBaseline, Grid, StyledComponentProps, withStyles } from "@material-ui/core"
 import { Message } from "../store/messages/state"
+import { Auth } from "../store/auth/state"
 
 interface StateProps {
-  auth: UserInfo
+  auth: Auth
   messages: Message[]
 }
 

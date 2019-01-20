@@ -9,7 +9,7 @@ const getUser = (uid: string) =>
     .once("value")
     .then(snapshot => {
       return ({
-        ...snapshot.val().providerData[0],
+        ...snapshot.val(),
         uid,
       })
     })

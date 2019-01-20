@@ -1,15 +1,15 @@
 import { reducerWithInitialState } from "typescript-fsa-reducers"
 import { add } from "./actions"
-import { UserInfo } from "firebase"
 
-// export const UserInfo = {
-//   displayName: "",
-//   email: "",
-//   photoURL: "",
-//   uid: "",
-// }
 
-const initialState: UserInfo[] = []
+export interface User {
+  avatarUrl:string,
+  displayName:string,
+  email:string,
+  uid:string
+}
+
+const initialState: User[] = []
 
 export const reducer = reducerWithInitialState(initialState)
-.case(add, (state: UserInfo[], payload: UserInfo[]): UserInfo[] => [...state, ...payload])
+.case(add, (state: User[], payload: User[]): User[] => [...state, ...payload])

@@ -1,18 +1,20 @@
 import { applyMiddleware, combineReducers, compose, createStore } from "redux"
 import createSagaMiddleware from "redux-saga"
 import * as auth from "./auth/state"
+import { Auth } from "./auth/state"
 import * as messages from "./messages/state"
 import { Message } from "./messages/state"
 import * as users from "./users/state"
-import { UserInfo } from "firebase"
+import { User } from "./users/state"
+
 import { all } from "redux-saga/effects"
 import messagesSaga from "./messages/saga"
 import usersSaga from "./users/saga"
 
 export type AppState = {
   messages: Message[]
-  auth: UserInfo
-  users: UserInfo[]
+  auth: Auth
+  users: User[]
 }
 
 const initialState = {

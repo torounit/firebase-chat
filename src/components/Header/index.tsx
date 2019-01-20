@@ -12,12 +12,13 @@ import {
 } from "@material-ui/core"
 import { withStyles } from "@material-ui/core/styles"
 import { AccountCircle } from "@material-ui/icons"
-import { UserInfo } from "firebase"
+
 
 import { compose, withHandlers, withState } from "recompose"
+import { Auth } from "../../store/auth/state"
 
 export interface StateProps {
-  user: UserInfo
+  user: Auth
 }
 
 export interface DispatchProps {

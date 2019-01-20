@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react"
-import { UserInfo } from "firebase"
+
 import {
   Avatar,
   ListItem,
@@ -11,13 +11,14 @@ import {
   withStyles,
 } from "@material-ui/core"
 import { Message } from "../../store/messages/state"
+import { User } from "../../store/users/state"
 
-type Props = { actions: ReactNode; message: Message; author: UserInfo | undefined } & StyledComponentProps
+type Props = { actions: ReactNode; message: Message; author: User | undefined } & StyledComponentProps
 
 const Single: React.FC<Props> = ({ message, actions, author, classes = {} }) => (
   <ListItem className={classes.item}>
     <ListItemAvatar className={classes.avatar}>
-      {author && author.photoURL ? <Avatar src={author.photoURL} /> : <Avatar>W</Avatar>}
+      {author && author.avatarUrl ? <Avatar src={author.avatarUrl} /> : <Avatar>W</Avatar>}
     </ListItemAvatar>
     <ListItemText
       primary={

@@ -2,7 +2,10 @@ import { reducerWithInitialState } from "typescript-fsa-reducers"
 import { login, logout } from "./actions"
 import { UserInfo } from "firebase"
 
-export const initialState: UserInfo = {
+export interface Auth extends UserInfo {
+}
+
+export const initialState: Auth = {
   displayName: "",
   email: "",
   phoneNumber: "",

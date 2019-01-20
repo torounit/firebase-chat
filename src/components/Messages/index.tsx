@@ -5,13 +5,16 @@ import { Message } from "../../store/messages/state"
 import { Delete } from "@material-ui/icons"
 import { compose, withHandlers } from "recompose"
 import { DispatchProp } from "react-redux"
-import { UserInfo } from "firebase"
+
 import Single from "./Single"
 import { isEqual } from "lodash"
+import { User } from "../../store/users/state"
+import { Auth } from "../../store/auth/state"
 
 export interface StateProps {
   messages: Message[]
-  users: UserInfo[]
+  users: User[]
+  auth: Auth
 }
 
 export interface DispatchProps {
@@ -59,7 +62,7 @@ class Messages extends React.Component<ComponentProps, ComponentState> {
   }
 
   render(): React.ReactNode {
-    const { classes = {}, messages, remove, users } = this.props
+    const { classes = {}, messages, remove, users, auth } = this.props
     return (
       <div className={classes.root} ref={el => (this.elemment = el)}>
         <List className={classes.list}>
@@ -71,12 +74,14 @@ class Messages extends React.Component<ComponentProps, ComponentState> {
                 {date.toLocaleString()}
               </ListSubheader>
             )
+            const author = users.find(({ uid }) => uid === message.authorUid);
             const single = (
               <Single
                 key={message.id}
                 message={message}
-                author={users.find(({ uid }) => uid === message.authorUid)}
+                author={author}
                 actions={
+                  author && author.uid === auth.uid &&
                   <IconButton
                     aria-label="Delete"
                     onClick={() => {
