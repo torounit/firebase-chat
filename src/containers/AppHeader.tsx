@@ -2,8 +2,13 @@ import React from "react"
 import * as firebase from "firebase/app"
 import "firebase/auth"
 import { connect } from "react-redux"
-import Header, { StateProps } from "../components/Header"
+import Header from "../components/Header"
 import { AppState } from "../store"
+import { Auth } from "../store/auth"
+
+export interface StateProps {
+  user: Auth
+}
 
 export interface DispatchProps {
   onLogin: () => void

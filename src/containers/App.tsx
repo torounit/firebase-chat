@@ -3,7 +3,7 @@ import { BrowserRouter, NavLink, Route } from "react-router-dom"
 import "firebase/auth"
 
 import { compose, withHandlers, withState } from "recompose"
-import { DispatchProp } from "react-redux"
+import { connect, DispatchProp } from "react-redux"
 
 import withTheme from "../utils/hoc/withTheme"
 
@@ -21,6 +21,7 @@ import {
 import AppDrawerMenu from "./AppDrawerMenu"
 import Home from "./Page/Home"
 import AddThread from "./Page/AddThread"
+import { AppState } from "../store"
 
 interface StateProps {}
 
@@ -36,13 +37,13 @@ interface WithHandlerProps {
 type Props = StateProps & DispatchProp & StyledComponentProps
 type FCProps = Props & WithStateProps & WithHandlerProps
 // @ts-ignore
-const App: React.FC<FCProps> = ({ isSideMenuOpen, handleSideMenuToggle, classes = {} }) => (
+const App: React.FC<FCProps> = ({ title, isSideMenuOpen, handleSideMenuToggle, classes = {} }) => (
   <div className="App">
     <CssBaseline />
     <BrowserRouter>
       <Grid className={classes.container} container wrap="nowrap" direction="column" justify="center">
         <Grid item>
-          <AppHeader handleSideMenuToggle={handleSideMenuToggle}>
+          <AppHeader title={`#${title}`} handleSideMenuToggle={handleSideMenuToggle}>
             <AppDrawerMenu open={isSideMenuOpen} handleToggleDrawer={handleSideMenuToggle}>
               <React.Fragment>
                 <ListSubheader>Links</ListSubheader>
@@ -84,11 +85,18 @@ export default compose<FCProps, {}>(
       flexShrink: 1,
       overflow: "hidden",
       height: "100vh",
-      margin: `${theme.spacing.unit}px 0`,
     },
   })),
   withState<WithStateProps, boolean, string, string>("isSideMenuOpen", "updateSideMenuOpen", false),
   withHandlers<FCProps, WithHandlerProps>({
     handleSideMenuToggle: ({ updateSideMenuOpen }) => status => updateSideMenuOpen(() => status),
-  })
+  }),
+  connect<StateProps, DispatchProp, {}, AppState>(
+    (state: AppState): StateProps => {
+      const thread = state.threads.find(({ isActive }) => !! isActive)
+      return ({
+        title: thread? thread.name : '',
+      })
+    }
+  )
 )(App)

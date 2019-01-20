@@ -36,10 +36,9 @@ export default compose<FCProps, {}>(
     },
     container: {
       flexShrink: 1,
-      overflow: "scroll",
+      overflow: "hidden",
       height: "100%",
-      margin: `${theme.spacing.unit}px 0`,
-      padding: `0 ${theme.spacing.unit * 4}px`,
+      padding: `${theme.spacing.unit}px 0 0`,
     },
   })),
   connect<StateProps, DispatchProp, {}, AppState>(
@@ -57,7 +56,7 @@ export default compose<FCProps, {}>(
       const { dispatch, match } = this.props
       if (prevProps.match.params !== match.params) {
         const params: any = match.params
-        let name = "";
+        let name = ""
         if (params.name) {
           name = params.name
         } else {

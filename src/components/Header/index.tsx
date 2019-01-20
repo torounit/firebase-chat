@@ -18,6 +18,7 @@ import { Auth } from "../../store/auth"
 
 export interface StateProps {
   user: Auth
+  title: string
 }
 
 export interface DispatchProps {
@@ -51,6 +52,7 @@ const Header: React.FC<FCProps> = ({
   anchorEl,
   handleSideMenuToggle,
   children,
+  title,
 }) => (
   <div>
     <AppBar position={"static"}>
@@ -63,9 +65,7 @@ const Header: React.FC<FCProps> = ({
         >
           <MenuIcon />
         </IconButton>
-        <Typography color="inherit" className={classes.grow}>
-          Chat App
-        </Typography>
+        <Typography color="inherit" variant="h6" className={classes.grow}>{title}</Typography>
 
         {user.displayName ? (
           <div ref={el => (UserMenu = el)} onClick={handleUserMenuOpen}>

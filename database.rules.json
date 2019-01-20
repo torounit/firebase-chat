@@ -3,8 +3,8 @@
     ".read": false,
     ".write": false,
     "threads": {
+      ".read": "auth != null",
       "$thread_id" : {
-        ".read": "auth != null",
         ".write": "auth != null"
       }
     },
