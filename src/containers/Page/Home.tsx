@@ -56,7 +56,6 @@ export default compose<FCProps, {}>(
     componentDidMount() {
       const { dispatch, thread } = this.props
       if (thread) {
-        //dispatch(threads.actions.select(thread.name))
         dispatch(messages.actions.subscribe(thread.name))
       }
 
@@ -65,7 +64,6 @@ export default compose<FCProps, {}>(
       const { dispatch, thread } = this.props
       if (thread && prevProps.thread != thread) {
         if (thread) {
-          //dispatch(threads.actions.select(thread.name))
           dispatch(messages.actions.subscribe(thread.name))
         }
       }
