@@ -12,7 +12,6 @@ const addThread = (thread: Thread) => database.ref(`threads/${thread.name}`).set
 const pushThread = function*(action: Action<Thread>) {
   const thread = action.payload
   yield call(addThread, thread)
-  //yield put(actions.add(thread))
 }
 
 const threadsChannel = () => {
@@ -42,6 +41,7 @@ const subscribeTheads = function*() {
         yield put(actions.sync(threads))
       }
     }
+  } catch {
   } finally {
     if (yield cancelled()) {
       channel.close()
@@ -51,7 +51,7 @@ const subscribeTheads = function*() {
 
 const select = function*(action: Action<RouterState>) {
   const location = action.payload.location
-  const syncThreads = yield take("SYNC_THREADS");
+  yield take("SYNC_THREADS");
     const re = pathToRegexp("/thread/:threadName")
     const params = re.exec(location.pathname)
     if (Array.isArray(params) && params[1]) {

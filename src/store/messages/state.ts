@@ -15,7 +15,6 @@ export const reducer = reducerWithInitialState(initialState)
   .case(
     add,
     (state: Message[], payload: { thread: string; message: Message }): Message[] => {
-      console.log(payload)
       return [...state, payload.message]
     }
   )
