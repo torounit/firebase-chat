@@ -25,7 +25,6 @@ const messageChannel = (threadName: string = "general") => {
 
 const subscribeMessages = function*(action: Action<string>) {
   const threadName = action.payload
-  console.log(threadName)
   const channel = yield call(messageChannel, threadName)
   try {
     while (true) {

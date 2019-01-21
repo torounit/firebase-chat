@@ -1,5 +1,5 @@
 import React from "react"
-import { BrowserRouter, NavLink, Route } from "react-router-dom"
+import { NavLink, Route, Switch } from "react-router-dom"
 import "firebase/auth"
 
 import { compose, withHandlers, withState } from "recompose"
@@ -21,7 +21,8 @@ import {
 import AppDrawerMenu from "./AppDrawerMenu"
 import Home from "./Page/Home"
 import AddThread from "./Page/AddThread"
-import { AppState } from "../store"
+import { AppState, history } from "../store"
+import { ConnectedRouter } from "connected-react-router"
 
 interface StateProps {}
 
@@ -40,7 +41,7 @@ type FCProps = Props & WithStateProps & WithHandlerProps
 const App: React.FC<FCProps> = ({ title, isSideMenuOpen, handleSideMenuToggle, classes = {} }) => (
   <div className="App">
     <CssBaseline />
-    <BrowserRouter>
+    <ConnectedRouter history={history}>
       <Grid className={classes.container} container wrap="nowrap" direction="column" justify="center">
         <Grid item>
           <AppHeader title={`#${title}`} handleSideMenuToggle={handleSideMenuToggle}>
@@ -64,14 +65,16 @@ const App: React.FC<FCProps> = ({ title, isSideMenuOpen, handleSideMenuToggle, c
           </AppHeader>
         </Grid>
         <Grid item className={classes.main}>
-          <React.Fragment>
+          <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/thread/:name" component={Home} />
             <Route path="/add-thread" component={AddThread} />
-          </React.Fragment>
+            <Route component={Home} />
+          </Switch>
         </Grid>
       </Grid>
-    </BrowserRouter>
+    </ConnectedRouter>
+
   </div>
 )
 
@@ -92,10 +95,11 @@ export default compose<FCProps, {}>(
     handleSideMenuToggle: ({ updateSideMenuOpen }) => status => updateSideMenuOpen(() => status),
   }),
   connect<StateProps, DispatchProp, {}, AppState>(
-    (state: AppState): StateProps => {
+      (state: AppState): StateProps => {
       const thread = state.threads.find(({ isActive }) => !!isActive)
       return {
         title: thread ? thread.name : "",
+        router: state.router
       }
     }
   )

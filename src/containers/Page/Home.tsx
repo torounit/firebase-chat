@@ -6,25 +6,28 @@ import { Grid, StyledComponentProps, withStyles } from "@material-ui/core"
 import { compose, lifecycle } from "recompose"
 import { AppState } from "../../store"
 import * as messages from "../../store/messages"
-import * as threads from "../../store/threads"
+import { Thread } from "../../store/threads"
 import ChatInputter from "../ChatInputter"
-import { RouteComponentProps } from "react-router"
+import { RouteChildrenProps, RouteComponentProps } from "react-router"
+import { RouterState } from "connected-react-router"
 
 interface StateProps {
   auth: Auth
+  thread?: Thread,
   messages: messages.Message[]
+  router: RouterState
 }
 
 type Props = StateProps & DispatchProp & StyledComponentProps & RouteComponentProps
-type FCProps = Props
+type FCProps = Props & RouteChildrenProps
 
 const App: React.FC<FCProps> = ({ auth, classes = {} }) => (
   <Grid container className={classes.root} wrap="nowrap" direction="column" justify="center">
     <Grid item className={classes.container}>
-      {auth.uid && <ChatMessages />}
+      {auth.uid && <ChatMessages/>}
     </Grid>
     <Grid item>
-      <ChatInputter />
+      <ChatInputter/>
     </Grid>
   </Grid>
 )
@@ -44,27 +47,28 @@ export default compose<FCProps, {}>(
   connect<StateProps, DispatchProp, {}, AppState>(
     (state: AppState): StateProps => ({
       auth: state.auth,
+      thread: state.threads.find(({ isActive }) => !!isActive),
       messages: state.messages,
-    })
+      router: state.router,
+    }),
   ),
   lifecycle<FCProps, {}>({
     componentDidMount() {
-      const { dispatch } = this.props
-      dispatch(messages.actions.subscribe("general"))
+      const { dispatch, thread } = this.props
+      if (thread) {
+        //dispatch(threads.actions.select(thread.name))
+        dispatch(messages.actions.subscribe(thread.name))
+      }
+
     },
     componentDidUpdate(prevProps) {
-      const { dispatch, match } = this.props
-      if (prevProps.match.params !== match.params) {
-        const params: any = match.params
-        let name = ""
-        if (params.name) {
-          name = params.name
-        } else {
-          name = "general"
+      const { dispatch, thread } = this.props
+      if (thread && prevProps.thread != thread) {
+        if (thread) {
+          //dispatch(threads.actions.select(thread.name))
+          dispatch(messages.actions.subscribe(thread.name))
         }
-        dispatch(threads.actions.select(name))
-        dispatch(messages.actions.subscribe(name))
       }
     },
-  })
+  }),
 )(App)

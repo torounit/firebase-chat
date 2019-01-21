@@ -1,15 +1,15 @@
 import React from "react"
 import { IconButton, List, ListSubheader, StyledComponentProps } from "@material-ui/core"
 import { withStyles } from "@material-ui/core/styles"
-import { Message } from "../../store/messages/state"
+import { Message } from "../../store/messages"
 import { Delete } from "@material-ui/icons"
 import { compose, withHandlers } from "recompose"
 import { DispatchProp } from "react-redux"
 
 import Single from "./Single"
 import { isEqual } from "lodash"
-import { User } from "../../store/users/state"
-import { Auth } from "../../store/auth/state"
+import { User } from "../../store/users"
+import { Auth } from "../../store/auth"
 import { Thread } from "../../store/threads"
 
 export interface StateProps {
