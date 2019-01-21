@@ -1,7 +1,7 @@
 import { eventChannel } from "redux-saga"
 import * as firebase from "firebase/app"
 import "firebase/auth"
-import { call, cancelled, fork, put, take } from "redux-saga/effects"
+import { call, cancelled, put, take } from "redux-saga/effects"
 import { login, logout } from "./actions"
 
 const authChannel = () => {
@@ -22,6 +22,7 @@ const subscribeAuth = function*() {
         yield put(logout())
       }
     }
+  } catch (e) {
   } finally {
     if (yield cancelled()) {
       channel.close()
@@ -30,9 +31,7 @@ const subscribeAuth = function*() {
 }
 
 const effects = [
-  fork(function*() {
-    yield fork(subscribeAuth)
-  }),
+  call(subscribeAuth),
 ]
 
 export default effects

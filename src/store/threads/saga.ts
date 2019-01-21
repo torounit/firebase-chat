@@ -1,4 +1,4 @@
-import { call, cancelled, Effect, fork, put, take, takeEvery } from "redux-saga/effects"
+import { call, cancelled, Effect, put, take, takeEvery } from "redux-saga/effects"
 import { Action } from "typescript-fsa"
 import { database } from "../../firebase"
 import * as actions from "./actions"
@@ -7,11 +7,11 @@ import { eventChannel } from "redux-saga"
 import { LOCATION_CHANGE, RouterState } from "connected-react-router"
 import pathToRegexp from "path-to-regexp"
 
-const addThread = (thread: Thread) => database.ref(`threads/${thread.name}`).set(thread)
+const pushThread = (thread: Thread) => database.ref(`threads/${thread.name}`).set(thread)
 
-const pushThread = function*(action: Action<Thread>) {
+const addThread = function*(action: Action<Thread>) {
   const thread = action.payload
-  yield call(addThread, thread)
+  yield call(pushThread, thread)
 }
 
 const threadsChannel = () => {
@@ -32,7 +32,7 @@ const threadsChannel = () => {
   })
 }
 
-const subscribeTheads = function*() {
+const threadsWatcher = function*() {
   const channel = yield call(threadsChannel)
   try {
     while (true) {
@@ -49,7 +49,7 @@ const subscribeTheads = function*() {
   }
 }
 
-const select = function*(action: Action<RouterState>) {
+const selectThread = function*(action: Action<RouterState>) {
   const location = action.payload.location
   yield take("SYNC_THREADS");
     const re = pathToRegexp("/thread/:threadName")
@@ -57,15 +57,15 @@ const select = function*(action: Action<RouterState>) {
     if (Array.isArray(params) && params[1]) {
       yield put(actions.select(params[1]))
     }
-
+    else {
+      yield put(actions.select("general"))
+    }
 }
 
 const effects: Effect[] = [
-  fork(function*() {
-    yield fork(subscribeTheads)
-  }),
-  takeEvery(LOCATION_CHANGE, select),
-  takeEvery("ADD_THREAD", pushThread),
+  call(threadsWatcher),
+  takeEvery(LOCATION_CHANGE, selectThread),
+  takeEvery("ADD_THREAD", addThread),
 ]
 
 export default effects
