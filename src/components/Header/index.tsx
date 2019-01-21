@@ -68,17 +68,20 @@ const Header: React.FC<FCProps> = ({
         <Typography color="inherit" variant="h6" className={classes.grow}>
           {title}
         </Typography>
-
-        {user.displayName ? (
-          <div ref={el => (UserMenu = el)} onClick={handleUserMenuOpen}>
-            <IconButton color="inherit">
-              {user.photoURL ? <Avatar src={user.photoURL} /> : <AccountCircle />}
-            </IconButton>
+        { ! user.waiting && (
+          <div>
+            {user.displayName ? (
+              <div ref={el => (UserMenu = el)} onClick={handleUserMenuOpen}>
+                <IconButton color="inherit">
+                  {user.photoURL ? <Avatar src={user.photoURL} /> : <AccountCircle />}
+                </IconButton>
+              </div>
+            ) : (
+              <Button color="inherit" onClick={() => onLogin()}>
+                Login
+              </Button>
+            )}
           </div>
-        ) : (
-          <Button color="inherit" onClick={() => onLogin()}>
-            Login
-          </Button>
         )}
       </Toolbar>
     </AppBar>

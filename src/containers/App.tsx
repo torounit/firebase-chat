@@ -38,7 +38,7 @@ interface WithHandlerProps {
 type Props = StateProps & DispatchProp & StyledComponentProps
 type FCProps = Props & WithStateProps & WithHandlerProps
 // @ts-ignore
-const App: React.FC<FCProps> = ({ title, isSideMenuOpen, handleSideMenuToggle, classes = {} }) => (
+const App: React.FC<FCProps> = ({ isWaiting, title, isSideMenuOpen, handleSideMenuToggle, classes = {} }) => (
   <div className="App">
     <CssBaseline />
     <ConnectedRouter history={history}>
@@ -80,7 +80,7 @@ const App: React.FC<FCProps> = ({ title, isSideMenuOpen, handleSideMenuToggle, c
 
 export default compose<FCProps, {}>(
   withTheme,
-  withStyles(theme => ({
+  withStyles(() => ({
     container: {
       height: "100vh",
     },
@@ -98,6 +98,7 @@ export default compose<FCProps, {}>(
       (state: AppState): StateProps => {
       const thread = state.threads.find(({ isActive }) => !!isActive)
       return {
+        isWaiting: Boolean(state.auth.waiting),
         title: thread ? thread.name : "",
         router: state.router
       }
