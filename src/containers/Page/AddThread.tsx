@@ -25,11 +25,11 @@ const Page: React.FC<Props> = ({ classes = {}, onSubmit }) => (
 export default compose<Props, {}>(
   withStyles(theme => ({
     root: {
-      margin: `${theme.spacing.unit}px 0`,
-      padding: `0 ${theme.spacing.unit * 4}px`,
+      margin: `${theme.spacing(1)}px 0`,
+      padding: `0 ${theme.spacing(2)}px`,
     },
     paper: {
-      padding: `${theme.spacing.unit * 2}px`,
+      padding: `${theme.spacing(2)}px`,
     },
   })),
   withRouter,

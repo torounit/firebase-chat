@@ -36,7 +36,7 @@ export default withStyles(theme => ({
     borderColor: "#ddd",
     borderWidth: "0 0 1px",
     borderStyle: "solid",
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing(2),
   },
   avatar: {
     width: "30px",

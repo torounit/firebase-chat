@@ -41,7 +41,7 @@ export default compose<FCProps, {}>(
       flexShrink: 1,
       overflow: "hidden",
       height: "100%",
-      padding: `${theme.spacing.unit}px 0 0`,
+      padding: `${theme.spacing(1)}px 0 0`,
     },
   })),
   connect<StateProps, DispatchProp, {}, AppState>(
@@ -58,7 +58,6 @@ export default compose<FCProps, {}>(
       if (thread) {
         dispatch(messages.actions.subscribe(thread.name))
       }
-
     },
     componentDidUpdate(prevProps) {
       const { dispatch, thread } = this.props
