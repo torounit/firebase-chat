@@ -1,7 +1,7 @@
 import { reducerWithInitialState } from "typescript-fsa-reducers"
 import { add, changeRoute, select, sync } from "./actions"
 import { RouterState } from "connected-react-router"
-import pathToRegexp from "path-to-regexp"
+import { pathToRegexp } from "path-to-regexp"
 
 export interface Thread {
   name: string

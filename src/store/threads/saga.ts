@@ -5,7 +5,7 @@ import * as actions from "./actions"
 import { Thread } from "./state"
 import { eventChannel } from "redux-saga"
 import { LOCATION_CHANGE, RouterState } from "connected-react-router"
-import pathToRegexp from "path-to-regexp"
+import { pathToRegexp } from "path-to-regexp"
 
 const pushThread = (thread: Thread) => database.ref(`threads/${thread.name}`).set(thread)
 
@@ -20,7 +20,7 @@ const threadsChannel = () => {
     ref.off()
     ref.on("value", snapshot => {
       if (snapshot) {
-        const map = snapshot.val() || {}
+        const map: Object = snapshot.val() || {}
         const threads = Object.entries(map).map(([id, value]) => ({ ...value, id }))
         emit(threads)
       }

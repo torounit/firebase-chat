@@ -11,7 +11,7 @@ const messageChannel = (threadName: string = "general") => {
     const ref = database.ref(messagesPath)
     ref.on("value", snapshot => {
       if (snapshot) {
-        const messagesMap = snapshot.val() || {}
+        const messagesMap: Object = snapshot.val() || {}
         const messages = Object.entries(messagesMap).map(([id, value]) => ({ ...value, id }))
         emit(messages)
       }

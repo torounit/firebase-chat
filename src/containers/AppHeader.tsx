@@ -15,7 +15,7 @@ export interface DispatchProps {
   onLogout: () => void
 }
 
-const AppHeader = connect(
+const AppHeader: React.FC<any> = connect(
   (state: AppState): StateProps => ({
     user: state.auth,
   }),
