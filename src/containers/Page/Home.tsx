@@ -13,7 +13,7 @@ import { RouterState } from "connected-react-router"
 
 interface StateProps {
   auth: Auth
-  thread?: Thread,
+  thread?: Thread
   messages: messages.Message[]
   router: RouterState
 }
@@ -24,10 +24,10 @@ type FCProps = Props & RouteChildrenProps
 const App: React.FC<FCProps> = ({ auth, classes = {} }) => (
   <Grid container className={classes.root} wrap="nowrap" direction="column" justify="center">
     <Grid item className={classes.container}>
-      {auth.uid && <ChatMessages/>}
+      {auth.uid && <ChatMessages />}
     </Grid>
     <Grid item>
-      <ChatInputter/>
+      <ChatInputter />
     </Grid>
   </Grid>
 )
@@ -50,7 +50,7 @@ export default compose<FCProps, {}>(
       thread: state.threads.find(({ isActive }) => !!isActive),
       messages: state.messages,
       router: state.router,
-    }),
+    })
   ),
   lifecycle<FCProps, {}>({
     componentDidMount() {
@@ -67,5 +67,5 @@ export default compose<FCProps, {}>(
         }
       }
     },
-  }),
+  })
 )(App)

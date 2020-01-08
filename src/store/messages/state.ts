@@ -12,16 +12,10 @@ export interface Message {
 const initialState: Message[] = []
 
 export const reducer = reducerWithInitialState(initialState)
-  .case(
-    add,
-    (state: Message[], payload: { thread: string; message: Message }): Message[] => {
-      return [...state, payload.message]
-    }
-  )
+  .case(add, (state: Message[], payload: { thread: string; message: Message }): Message[] => {
+    return [...state, payload.message]
+  })
   .case(remove, (state: Message[], payload: { thread: string; id: string }) => state.filter(o => o.id !== payload.id))
-  .case(
-    receive,
-    (state: Message[], payload: Message[]): Message[] => {
-      return payload
-    }
-  )
+  .case(receive, (state: Message[], payload: Message[]): Message[] => {
+    return payload
+  })

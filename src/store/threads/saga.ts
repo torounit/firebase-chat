@@ -51,15 +51,14 @@ const threadsWatcher = function*() {
 
 const selectThread = function*(action: Action<RouterState>) {
   const location = action.payload.location
-  yield take("SYNC_THREADS");
-    const re = pathToRegexp("/thread/:threadName")
-    const params = re.exec(location.pathname)
-    if (Array.isArray(params) && params[1]) {
-      yield put(actions.select(params[1]))
-    }
-    else {
-      yield put(actions.select("general"))
-    }
+  yield take("SYNC_THREADS")
+  const re = pathToRegexp("/thread/:threadName")
+  const params = re.exec(location.pathname)
+  if (Array.isArray(params) && params[1]) {
+    yield put(actions.select(params[1]))
+  } else {
+    yield put(actions.select("general"))
+  }
 }
 
 const effects: Effect[] = [

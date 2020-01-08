@@ -6,7 +6,10 @@ import { login, logout } from "./actions"
 
 const authChannel = () => {
   return eventChannel(emit => {
-    return firebase.auth().onAuthStateChanged(user => emit({ user }), error => emit({ error }))
+    return firebase.auth().onAuthStateChanged(
+      user => emit({ user }),
+      error => emit({ error })
+    )
   })
 }
 
@@ -30,8 +33,6 @@ const subscribeAuth = function*() {
   }
 }
 
-const effects = [
-  call(subscribeAuth),
-]
+const effects = [call(subscribeAuth)]
 
 export default effects

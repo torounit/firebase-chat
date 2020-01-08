@@ -74,7 +74,6 @@ const App: React.FC<FCProps> = ({ isWaiting, title, isSideMenuOpen, handleSideMe
         </Grid>
       </Grid>
     </ConnectedRouter>
-
   </div>
 )
 
@@ -95,12 +94,12 @@ export default compose<FCProps, {}>(
     handleSideMenuToggle: ({ updateSideMenuOpen }) => status => updateSideMenuOpen(() => status),
   }),
   connect<StateProps, DispatchProp, {}, AppState>(
-      (state: AppState): StateProps => {
+    (state: AppState): StateProps => {
       const thread = state.threads.find(({ isActive }) => !!isActive)
       return {
         isWaiting: Boolean(state.auth.waiting),
         title: thread ? thread.name : "",
-        router: state.router
+        router: state.router,
       }
     }
   )

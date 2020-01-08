@@ -68,7 +68,7 @@ const Header: React.FC<FCProps> = ({
         <Typography color="inherit" variant="h6" className={classes.grow}>
           {title}
         </Typography>
-        { ! user.waiting && (
+        {!user.waiting && (
           <div>
             {user.displayName ? (
               <div ref={el => (UserMenu = el)} onClick={handleUserMenuOpen}>

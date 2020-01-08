@@ -35,10 +35,10 @@ export default compose<Props, {}>(
   withRouter,
   connect<StateProps, DispatchProps, RouteChildrenProps, AppState>(
     (state: AppState): StateProps => ({}),
-    (dispatch: Dispatch, props: RouteChildrenProps ) => ({
+    (dispatch: Dispatch, props: RouteChildrenProps) => ({
       onSubmit: threadName => {
-        const { history } = props;
-        const name = threadName.replace(/\s+/g, "-").toLowerCase();
+        const { history } = props
+        const name = threadName.replace(/\s+/g, "-").toLowerCase()
         const thread: Thread = {
           name: threadName.replace(/\s+/g, "-").toLowerCase(),
           title: threadName,
@@ -47,7 +47,6 @@ export default compose<Props, {}>(
         dispatch(threads.actions.add(thread))
         dispatch(threads.actions.select(name))
         history.push(`/thread/${name}`)
-
       },
     })
   )

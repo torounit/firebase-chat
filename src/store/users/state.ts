@@ -10,7 +10,7 @@ export interface User {
 
 const initialState: User[] = []
 
-export const reducer = reducerWithInitialState(initialState).case(
-  add,
-  (state: User[], payload: User[]): User[] => [...state, ...payload]
-)
+export const reducer = reducerWithInitialState(initialState).case(add, (state: User[], payload: User[]): User[] => [
+  ...state,
+  ...payload,
+])
