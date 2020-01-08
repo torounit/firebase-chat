@@ -9,9 +9,6 @@ const theme = createMuiTheme({
       default: "#ddd",
     },
   },
-  typography: {
-    useNextVariants: true,
-  },
 })
 const withRoot = (Component: React.ComponentClass | React.SFC) => (props: any) => (
   <MuiThemeProvider theme={theme}>
